@@ -1,0 +1,33 @@
+{
+  "name": "rdfjs-wrapper",
+  "version": "0.0.1",
+  "description": "RDF/JS object mapping library",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "rdf",
+    "object-oriented",
+    "rdfjs",
+    "mapping",
+    "wrapper"
+  ],
+  "contributors": [
+    "Matthieu Bosquet (https://github.com/matthieubosquet)",
+    "Samu Lang (https://github.com/langsamu)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@rdfjs/types": "2",
+    "@types/node": "24",
+    "typescript": "5"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
