@@ -1,7 +1,5 @@
 import { Child } from "./Child.js"
-import { Wrapper } from "../wrapping/Wrapper.js"
-import { ValueMappings } from "../wrapping/ValueMappings.js"
-import { TermMappings } from "../wrapping/TermMappings.js"
+import { Wrapper, ValueMappings, TermMappings } from "rdfjs-wrapper"
 import { Vocabulary } from "../Vocabulary.js"
 import type { Term, DatasetCore, DataFactory } from "@rdfjs/types"
 

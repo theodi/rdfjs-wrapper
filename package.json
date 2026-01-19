@@ -2,16 +2,16 @@
   "name": "rdfjs-wrapper",
   "version": "0.3.0",
   "description": "RDF/JS object mapping library",
-  "main": "dist/index.js",
+  "main": "dist/mod.js",
   "type": "module",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/mod.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/mod.js"
   },
   "scripts": {
     "build": "tsc",
     "build:test": "tsc -p test",
-    "start": "node dist/index.js",
+    "start": "npm run test",
     "test": "npm run build:test && node --test \"**/*.test.js\""
   },
   "keywords": [
