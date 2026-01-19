@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "rootDir": ".",
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "declarationMap": false,
+    "paths": {
+      "rdfjs-wrapper": ["../dist/index.d.ts"]
+    }
+  },
+  "include": ["./unit"]
+}
