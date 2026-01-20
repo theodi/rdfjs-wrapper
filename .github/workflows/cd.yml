@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   test:
     strategy:
@@ -28,6 +32,6 @@ jobs:
           node-version-file: .nvmrc
       - run: npm i
       - run: npx tsc
-      - run: npm publish --access=public
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
