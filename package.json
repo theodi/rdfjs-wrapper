@@ -11,6 +11,10 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theodi/rdfjs-wrapper.git"
+  },
   "scripts": {
     "start": "npm test",
     "test": "tsc && tsc -p test && node --test \"**/*.test.js\""
