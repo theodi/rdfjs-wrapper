@@ -3,9 +3,6 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "rootDir": ".",
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "declarationMap": true,
     "paths": {
       "rdfjs-wrapper": ["../dist/mod.d.ts"]
     }
