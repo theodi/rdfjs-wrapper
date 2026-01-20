@@ -1,11 +1,25 @@
-name: Publish Package to npm
+name: Continuous Deployment (CD)
 
 on:
   release:
     types: [published]
 
 jobs:
+  test:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+      - run: npm i
+      - run: npx tsc
+      - run: npm test
   publish:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -14,6 +28,6 @@ jobs:
           node-version-file: .nvmrc
       - run: npm i
       - run: npx tsc
-      - run: npm publish --access=public --dry-run
+      - run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

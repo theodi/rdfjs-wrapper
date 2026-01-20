@@ -5,8 +5,16 @@
 
 An [RDF/JS](https://rdf.js.org/data-model-spec/) object mapping library.
 
+
 ## Documentation
 
+### Getter
+
+options: value or set;
+
+### Setter
+
+options: nullable;
 
 
 ## License
