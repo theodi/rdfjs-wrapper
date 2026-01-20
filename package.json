@@ -9,8 +9,7 @@
     ".": "./dist/mod.js"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "npm run test",
+    "start": "npm test",
     "test": "tsc && tsc -p test && node --test \"**/*.test.js\""
   },
   "keywords": [
