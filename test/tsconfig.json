@@ -4,8 +4,8 @@
     "outDir": "./dist/",
     "rootDir": ".",
     "allowSyntheticDefaultImports": true,
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "paths": {
       "rdfjs-wrapper": ["../dist/mod.d.ts"]
     }
