@@ -8,9 +8,8 @@ package-lock.json
 dist
 
 # IDE
-.vscode/
-.vs/
-.idea/
+.vs
+.idea
 *.swp
 *.swo
 
