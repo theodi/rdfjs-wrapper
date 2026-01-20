@@ -10,9 +10,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:test": "tsc -p test",
     "start": "npm run test",
-    "test": "npm run build:test && node --test \"**/*.test.js\""
+    "test": "tsc && tsc -p test && node --test \"**/*.test.js\""
   },
   "keywords": [
     "rdf",
