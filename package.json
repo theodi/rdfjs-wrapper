@@ -8,6 +8,9 @@
   "exports": {
     ".": "./dist/mod.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "npm test",
     "test": "tsc && tsc -p test && node --test \"**/*.test.js\""
