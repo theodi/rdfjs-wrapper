@@ -2,7 +2,7 @@ import { Wrapper } from "./Wrapper.js"
 import type { DatasetCore, DataFactory } from "@rdfjs/types"
 
 export namespace TermMappings {
-	export function StringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): Wrapper | undefined {
+	export function stringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): Wrapper | undefined {
 		if (v === undefined) {
 			return undefined
 		}

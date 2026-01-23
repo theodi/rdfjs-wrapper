@@ -13,10 +13,10 @@ export class Parent extends Wrapper {
 	}
 
 	public get hasString(): string | undefined {
-		return this.singular(Vocabulary.hasString, ValueMappings.LiteralToString)
+		return this.singular(Vocabulary.hasString, ValueMappings.literalToString)
 	}
 	public set hasString(value: string | undefined) {
-		this.overwriteNullable(Vocabulary.hasString, value, TermMappings.StringToLiteral)
+		this.overwriteNullable(Vocabulary.hasString, value, TermMappings.stringToLiteral)
 	}
 	public get hasChild(): Child {
 		return this.singular(Vocabulary.hasChild, Child.wrap2)

@@ -15,9 +15,9 @@ export class Child extends Wrapper {
 	}
 
 	public get hasName(): string | undefined {
-		return this.singular(Vocabulary.hasName, ValueMappings.LiteralToString)
+		return this.singular(Vocabulary.hasName, ValueMappings.literalToString)
 	}
 	public set hasName(value: string | undefined) {
-		this.overwriteNullable(Vocabulary.hasName, value, TermMappings.StringToLiteral)
+		this.overwriteNullable(Vocabulary.hasName, value, TermMappings.stringToLiteral)
 	}
 }
