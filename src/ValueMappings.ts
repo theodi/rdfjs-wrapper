@@ -9,6 +9,10 @@ export namespace ValueMappings {
         return new Date(n.term.value)
     }
 
+    export function literalToNumber(n: Wrapper): number {
+        return Number(n.term.value)
+    }
+
     export function iriToString(n: Wrapper): string {
         return n.term.value
     }
