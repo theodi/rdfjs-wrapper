@@ -36,6 +36,14 @@ export class Wrapper {
 		)
 	}
 
+	protected singularNullable<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T | undefined {
+		for (const q of this.dataset.match(this.term, p)) {
+			return valueMapping(new Wrapper(q.object, this.dataset, this.factory))
+		}
+
+		return
+	}
+
 	protected objects<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>): Set<T> {
 		return new WrappingSet(this, p, valueMapping, termMapping)
 	}
