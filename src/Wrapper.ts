@@ -1,92 +1,93 @@
 import type { ValueMapping } from "./ValueMapping.js"
 import type { TermMapping } from "./TermMapping.js"
 import { WrappingSet } from "./WrappingSet.js"
-import type { Term, DatasetCore, Quad_Subject, Quad_Predicate, Quad_Object, DataFactory } from "@rdfjs/types"
+import type { DataFactory, DatasetCore, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types"
 
 export class Wrapper {
-	#term: Term
-	#dataset: DatasetCore
-	#factory: DataFactory
+    readonly #term: Term
+    readonly #dataset: DatasetCore
+    readonly #factory: DataFactory
 
-	public constructor(term: Term, dataset: DatasetCore, factory: DataFactory) {
-		this.#term = term
-		this.#dataset = dataset
-		this.#factory = factory
-	}
+    public constructor(term: Term, dataset: DatasetCore, factory: DataFactory) {
+        this.#term = term
+        this.#dataset = dataset
+        this.#factory = factory
+    }
 
-	get dataset(): DatasetCore {
-		return this.#dataset
-	}
+    get dataset(): DatasetCore {
+        return this.#dataset
+    }
 
-	get term(): Term {
-		return this.#term
-	}
+    get term(): Term {
+        return this.#term
+    }
 
-	get factory(): DataFactory {
-		return this.#factory
-	}
+    get factory(): DataFactory {
+        return this.#factory
+    }
 
-	protected singular<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T {
-		return valueMapping(
-			new Wrapper(
-				[...this.dataset.match(this.term, p)][0]!.object,
-				this.dataset,
-				this.factory
-			)
-		)
-	}
+    protected singular<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T {
+        return valueMapping(
+            new Wrapper(
+                [...this.dataset.match(this.term, p)][0]!.object,
+                this.dataset,
+                this.factory
+            )
+        )
+    }
 
-	protected singularNullable<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T | undefined {
-		for (const q of this.dataset.match(this.term, p)) {
-			return valueMapping(new Wrapper(q.object, this.dataset, this.factory))
-		}
+    protected singularNullable<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T | undefined {
+        for (const q of this.dataset.match(this.term, p)) {
+            return valueMapping(new Wrapper(q.object, this.dataset, this.factory))
+        }
 
-		return
-	}
+        return
+    }
 
-	protected objects<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>): Set<T> {
-		return new WrappingSet(this, p, valueMapping, termMapping)
-	}
-	protected overwriteNullable<T>(p: Quad_Predicate, value: T | undefined, termMapping: TermMapping<T>): void {
-		for (const q of this.dataset.match(this.term, p)) {
-			this.dataset.delete(q)
-		}
+    protected objects<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>): Set<T> {
+        return new WrappingSet(this, p, valueMapping, termMapping)
+    }
 
-		if (value === undefined) {
-			return
-		}
+    protected overwriteNullable<T>(p: Quad_Predicate, value: T | undefined, termMapping: TermMapping<T>): void {
+        for (const q of this.dataset.match(this.term, p)) {
+            this.dataset.delete(q)
+        }
 
-		if (!Wrapper.isQuadSubject(this.term)) {
-			return // TODO: throw error?
-		}
+        if (value === undefined) {
+            return
+        }
 
-		const o = termMapping(value, this.dataset, this.factory)
+        if (!Wrapper.isQuadSubject(this.term)) {
+            return // TODO: throw error?
+        }
 
-		if (o === undefined) {
-			return // TODO: throw error?
-		}
+        const o = termMapping(value, this.dataset, this.factory)
 
-		if (!Wrapper.isQuadObject(o.term)) {
-			return // TODO: throw error?
-		}
+        if (o === undefined) {
+            return // TODO: throw error?
+        }
 
-		const q = this.factory.quad(this.term, p, o.term)
-		this.dataset.add(q)
-	}
+        if (!Wrapper.isQuadObject(o.term)) {
+            return // TODO: throw error?
+        }
 
-	protected overwrite<T>(p: Quad_Predicate, value: T, nodeMapping: TermMapping<T>): void {
-		if (value === undefined) {
-			throw new Error("value cannot be undefined")
-		}
+        const q = this.factory.quad(this.term, p, o.term)
+        this.dataset.add(q)
+    }
 
-		this.overwriteNullable(p, value, nodeMapping)
-	}
+    protected overwrite<T>(p: Quad_Predicate, value: T, nodeMapping: TermMapping<T>): void {
+        if (value === undefined) {
+            throw new Error("value cannot be undefined")
+        }
 
-	private static isQuadSubject(term: Term): term is Quad_Subject {
-		return ["NamedNode", "BlankNode", "Quad", "Variable"].includes(term.termType)
-	}
+        this.overwriteNullable(p, value, nodeMapping)
+    }
 
-	private static isQuadObject(term: Term): term is Quad_Object {
-		return ["NamedNode", "Literal", "BlankNode", "Quad", "Variable"].includes(term.termType)
-	}
+    private static isQuadSubject(term: Term): term is Quad_Subject {
+        return ["NamedNode", "BlankNode", "Quad", "Variable"].includes(term.termType)
+    }
+
+    private static isQuadObject(term: Term): term is Quad_Object {
+        return ["NamedNode", "Literal", "BlankNode", "Quad", "Variable"].includes(term.termType)
+    }
 }

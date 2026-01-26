@@ -1,11 +1,5 @@
-import {ValueMappings} from "rdfjs-wrapper"
-import {Wrapper} from "rdfjs-wrapper"
-import {TermMappings} from "rdfjs-wrapper"
-import {GetterArity} from "rdfjs-wrapper"
-import {SetterArity} from "rdfjs-wrapper"
-import {getter} from "rdfjs-wrapper"
-import {setter} from "rdfjs-wrapper"
-import type {DataFactory, DatasetCore, Term} from "@rdfjs/types"
+import { getter, GetterArity, setter, SetterArity, TermMappings, ValueMappings, Wrapper } from "rdfjs-wrapper"
+import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 
 export class SomeModelClass extends Wrapper {
     private constructor(node: Term, dataset: DatasetCore, factory: DataFactory) {
