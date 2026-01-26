@@ -14,6 +14,10 @@ export class Wrapper {
         this.#factory = factory
     }
 
+    public static as<T>(constructor: new (term: Term, dataset: DatasetCore, factory: DataFactory) => T): ValueMapping<T> {
+        return (n: Wrapper) => new constructor(n.term, n.dataset, n.factory)
+    }
+
     get dataset(): DatasetCore {
         return this.#dataset
     }

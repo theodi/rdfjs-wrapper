@@ -25,7 +25,7 @@ prefix : <https://example.org/>
         dataset.addQuads(new Parser().parse(rdf));
         const x = DataFactory.namedNode("x")
 
-        const p = Parent.wrap(x, dataset, DataFactory)
+        const p = new Parent(x, dataset, DataFactory)
 
 
         assert.equal("o1", p.hasString)
@@ -39,7 +39,7 @@ prefix : <https://example.org/>
         assert.equal("x", p.hasString)
 
         const newNode = DataFactory.namedNode("example.com/s")
-        const newChild = Child.wrap(newNode, dataset, DataFactory)
+        const newChild = new Child(newNode, dataset, DataFactory)
         newChild.hasName = "new name"
         p.hasChild = newChild
 
@@ -71,7 +71,7 @@ prefix : <https://example.org/>
         dataset.addQuads(new Parser().parse(rdf))
         const x = DataFactory.namedNode("x")
 
-        const someModelClass = SomeModelClass.wrap(x, dataset, DataFactory)
+        const someModelClass = new SomeModelClass(x, dataset, DataFactory)
 
         assert.equal("o1", someModelClass.p1)
 

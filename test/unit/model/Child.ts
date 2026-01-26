@@ -1,20 +1,7 @@
 import { TermMappings, ValueMappings, Wrapper } from "rdfjs-wrapper"
 import { Vocabulary } from "../Vocabulary.js"
-import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 
 export class Child extends Wrapper {
-    private constructor(node: Term, dataset: DatasetCore, factory: DataFactory) {
-        super(node, dataset, factory)
-    }
-
-    public static wrap(node: Term, dataset: DatasetCore, factory: DataFactory): Child {
-        return new Child(node, dataset, factory)
-    }
-
-    public static wrap2(node: Wrapper): Child {
-        return Child.wrap(node.term, node.dataset, node.factory)
-    }
-
     public get hasName(): string | undefined {
         return this.singular(Vocabulary.hasName, ValueMappings.literalToString)
     }
