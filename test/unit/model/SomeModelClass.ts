@@ -1,4 +1,4 @@
-import { getter, GetterArity, setter, SetterArity, TermMappings, ValueMappings, TermWrapper } from "rdfjs-wrapper"
+import { getter, GetterArity, setter, SetterArity, TermMappings, TermWrapper, ValueMappings } from "rdfjs-wrapper"
 
 export class SomeModelClass extends TermWrapper {
     @getter("https://example.org/hasString", GetterArity.Singular, ValueMappings.literalToString)

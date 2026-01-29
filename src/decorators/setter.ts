@@ -1,6 +1,6 @@
-import {SetterArity} from "./setterArity.js"
-import type {TermMapping} from "../TermMapping.js"
-import {TermWrapper} from "../TermWrapper.js"
+import { SetterArity } from "./setterArity.js"
+import type { TermMapping } from "../TermMapping.js"
+import { TermWrapper } from "../TermWrapper.js"
 
 export function setter(predicate: string, setterArity: SetterArity, termMapping: TermMapping<any>): any {
     return function (target: any, context: ClassSetterDecoratorContext): any {
