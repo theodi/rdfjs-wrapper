@@ -1,17 +1,17 @@
-import { Wrapper } from "./Wrapper.js"
+import { TermWrapper } from "./TermWrapper.js"
 import type { TermMapping } from "./TermMapping.js"
 import type { ValueMapping } from "./ValueMapping.js"
 import type { DatasetCore, Quad, Quad_Object, Quad_Predicate, Quad_Subject } from "@rdfjs/types"
 
 export class WrappingSet<T> implements Set<T> {
     // TODO: Private identifiers instead?
-    private subject: Wrapper
+    private subject: TermWrapper
     private predicate: Quad_Predicate
     private valueMapping: ValueMapping<T>
     private termMapping: TermMapping<T>
 
     // TODO: Direction
-    constructor(subject: Wrapper, predicate: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>) {
+    constructor(subject: TermWrapper, predicate: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>) {
         this.subject = subject
         this.predicate = predicate
         this.valueMapping = valueMapping
@@ -73,7 +73,7 @@ export class WrappingSet<T> implements Set<T> {
 
     * values(): SetIterator<T> {
         for (const q of this.matches) {
-            yield this.valueMapping(new Wrapper(q.object, this.subject.dataset, this.subject.factory))
+            yield this.valueMapping(new TermWrapper(q.object, this.subject.dataset, this.subject.factory))
         }
     }
 

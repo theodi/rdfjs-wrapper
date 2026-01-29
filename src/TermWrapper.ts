@@ -3,7 +3,7 @@ import type { TermMapping } from "./TermMapping.js"
 import { WrappingSet } from "./WrappingSet.js"
 import type { DataFactory, DatasetCore, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types"
 
-export class Wrapper {
+export class TermWrapper {
     readonly #term: Term
     readonly #dataset: DatasetCore
     readonly #factory: DataFactory
@@ -15,7 +15,7 @@ export class Wrapper {
     }
 
     public static as<T>(constructor: new (term: Term, dataset: DatasetCore, factory: DataFactory) => T): ValueMapping<T> {
-        return (n: Wrapper) => new constructor(n.term, n.dataset, n.factory)
+        return (n: TermWrapper) => new constructor(n.term, n.dataset, n.factory)
     }
 
     get dataset(): DatasetCore {
@@ -32,7 +32,7 @@ export class Wrapper {
 
     protected singular<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T {
         return valueMapping(
-            new Wrapper(
+            new TermWrapper(
                 [...this.dataset.match(this.term, p)][0]!.object,
                 this.dataset,
                 this.factory
@@ -42,7 +42,7 @@ export class Wrapper {
 
     protected singularNullable<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T | undefined {
         for (const q of this.dataset.match(this.term, p)) {
-            return valueMapping(new Wrapper(q.object, this.dataset, this.factory))
+            return valueMapping(new TermWrapper(q.object, this.dataset, this.factory))
         }
 
         return
@@ -61,7 +61,7 @@ export class Wrapper {
             return
         }
 
-        if (!Wrapper.isQuadSubject(this.term)) {
+        if (!TermWrapper.isQuadSubject(this.term)) {
             return // TODO: throw error?
         }
 
@@ -71,7 +71,7 @@ export class Wrapper {
             return // TODO: throw error?
         }
 
-        if (!Wrapper.isQuadObject(o.term)) {
+        if (!TermWrapper.isQuadObject(o.term)) {
             return // TODO: throw error?
         }
 

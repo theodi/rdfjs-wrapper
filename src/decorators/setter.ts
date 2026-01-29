@@ -1,10 +1,10 @@
 import {SetterArity} from "./setterArity.js"
 import type {TermMapping} from "../TermMapping.js"
-import {Wrapper} from "../Wrapper.js"
+import {TermWrapper} from "../TermWrapper.js"
 
 export function setter(predicate: string, setterArity: SetterArity, termMapping: TermMapping<any>): any {
     return function (target: any, context: ClassSetterDecoratorContext): any {
-        return function (this: Wrapper, value: any): void {
+        return function (this: TermWrapper, value: any): void {
             const p = this.factory.namedNode(predicate)
 
             switch (setterArity) {

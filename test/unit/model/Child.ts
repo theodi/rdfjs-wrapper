@@ -1,7 +1,7 @@
-import { TermMappings, ValueMappings, Wrapper } from "rdfjs-wrapper"
+import { TermMappings, ValueMappings, TermWrapper } from "rdfjs-wrapper"
 import { Vocabulary } from "../Vocabulary.js"
 
-export class Child extends Wrapper {
+export class Child extends TermWrapper {
     public get hasName(): string | undefined {
         return this.singular(Vocabulary.hasName, ValueMappings.literalToString)
     }

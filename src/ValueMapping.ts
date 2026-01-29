@@ -1,5 +1,5 @@
-import type { Wrapper } from "./Wrapper.js"
+import type { TermWrapper } from "./TermWrapper.js"
 
 export interface ValueMapping<T> {
-    (n: Wrapper): T
+    (n: TermWrapper): T
 }

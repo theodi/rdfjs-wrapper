@@ -1,28 +1,28 @@
-import { Wrapper } from "./Wrapper.js"
+import { TermWrapper } from "./TermWrapper.js"
 import type { DataFactory, DatasetCore } from "@rdfjs/types"
 
 export namespace TermMappings {
-    export function stringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): Wrapper | undefined {
+    export function stringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
         if (v === undefined) {
             return undefined
         }
 
-        return new Wrapper(f.literal(v), d, f)
+        return new TermWrapper(f.literal(v), d, f)
     }
 
-    export function dateToLiteral(v: Date | undefined, d: DatasetCore, f: DataFactory): Wrapper | undefined {
+    export function dateToLiteral(v: Date | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
         if (v === undefined) {
             return undefined
         }
 
-        return new Wrapper(f.literal(v.toISOString(), f.namedNode("http://www.w3.org/2001/XMLSchema#date")), d, f)
+        return new TermWrapper(f.literal(v.toISOString(), f.namedNode("http://www.w3.org/2001/XMLSchema#date")), d, f)
     }
 
-    export function stringToIri(v: string | undefined, d: DatasetCore, f: DataFactory): Wrapper | undefined {
+    export function stringToIri(v: string | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
         if (v === undefined) {
             return undefined
         }
 
-        return new Wrapper(f.namedNode(v), d, f)
+        return new TermWrapper(f.namedNode(v), d, f)
     }
 }

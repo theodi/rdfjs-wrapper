@@ -1,19 +1,19 @@
-import type { Wrapper } from "./Wrapper.js"
+import type { TermWrapper } from "./TermWrapper.js"
 
 export namespace ValueMappings {
-    export function literalToString(n: Wrapper): string {
+    export function literalToString(n: TermWrapper): string {
         return n.term.value
     }
 
-    export function literalToDate(n: Wrapper): Date {
+    export function literalToDate(n: TermWrapper): Date {
         return new Date(n.term.value)
     }
 
-    export function literalToNumber(n: Wrapper): number {
+    export function literalToNumber(n: TermWrapper): number {
         return Number(n.term.value)
     }
 
-    export function iriToString(n: Wrapper): string {
+    export function iriToString(n: TermWrapper): string {
         return n.term.value
     }
 }
