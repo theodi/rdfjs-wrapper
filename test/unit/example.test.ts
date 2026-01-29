@@ -1,7 +1,7 @@
 import { DataFactory, Parser, Store } from "n3"
 import assert from "node:assert"
 import { describe, it } from "node:test"
-import { Parent } from "./model/Parent.js"
+import { MyDataset } from "./model/MyDataset.js"
 import { Child } from "./model/Child.js"
 import { SomeModelClass } from "./model/SomeModelClass.js"
 
@@ -21,34 +21,33 @@ prefix : <https://example.org/>
 ] .
 `;
 
-        const dataset = new Store();
-        dataset.addQuads(new Parser().parse(rdf));
-        const x = DataFactory.namedNode("x")
+        const store = new Store()
+        store.addQuads(new Parser().parse(rdf));
+        const dataset = new MyDataset(store, DataFactory)
 
-        const p = new Parent(x, dataset, DataFactory)
+        for (const p of dataset.parents) {
+            assert.equal("o1", p.hasString)
+            assert.equal("name", p.hasChild.hasName)
+            for (const c of p.hasChildSet) {
+                // TODO: assertions
+                console.log("p.hasChildSet.hasName", c.hasName);
+            }
 
+            p.hasString = "x"
+            assert.equal("x", p.hasString)
 
-        assert.equal("o1", p.hasString)
-        assert.equal("name", p.hasChild.hasName)
-        for (const c of p.hasChildSet) {
-            // TODO: assertions
-            console.log("p.hasChildSet.hasName", c.hasName);
-        }
+            const newNode = DataFactory.namedNode("example.com/s")
+            const newChild = new Child(newNode, dataset, DataFactory)
+            newChild.hasName = "new name"
+            p.hasChild = newChild
 
-        p.hasString = "x"
-        assert.equal("x", p.hasString)
+            assert.equal("new name", p.hasChild.hasName)
 
-        const newNode = DataFactory.namedNode("example.com/s")
-        const newChild = new Child(newNode, dataset, DataFactory)
-        newChild.hasName = "new name"
-        p.hasChild = newChild
-
-        assert.equal("new name", p.hasChild.hasName)
-
-        p.hasChildSet.add(newChild)
-        for (const c of p.hasChildSet) {
-            // TODO: assertions
-            console.log("p.hasChildSet.hasName modified", c.hasName);
+            p.hasChildSet.add(newChild)
+            for (const c of p.hasChildSet) {
+                // TODO: assertions
+                console.log("p.hasChildSet.hasName modified", c.hasName);
+            }
         }
     })
 
