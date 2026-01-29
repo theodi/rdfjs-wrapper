@@ -4,30 +4,11 @@ import { WrappingSet } from "./WrappingSet.js"
 import type { DataFactory, DatasetCore, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types"
 
 export class TermWrapper {
-    readonly #term: Term
-    readonly #dataset: DatasetCore
-    readonly #factory: DataFactory
-
-    public constructor(term: Term, dataset: DatasetCore, factory: DataFactory) {
-        this.#term = term
-        this.#dataset = dataset
-        this.#factory = factory
+    public constructor(public readonly term: Term, public readonly dataset: DatasetCore, public readonly factory: DataFactory) {
     }
 
     public static as<T>(constructor: new (term: Term, dataset: DatasetCore, factory: DataFactory) => T): ValueMapping<T> {
         return (n: TermWrapper) => new constructor(n.term, n.dataset, n.factory)
-    }
-
-    get dataset(): DatasetCore {
-        return this.#dataset
-    }
-
-    get term(): Term {
-        return this.#term
-    }
-
-    get factory(): DataFactory {
-        return this.#factory
     }
 
     protected singular<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T {

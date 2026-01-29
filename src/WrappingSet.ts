@@ -4,14 +4,8 @@ import type { ValueMapping } from "./ValueMapping.js"
 import type { DatasetCore, Quad, Quad_Object, Quad_Predicate, Quad_Subject } from "@rdfjs/types"
 
 export class WrappingSet<T> implements Set<T> {
-    // TODO: Private identifiers instead?
-    private subject: TermWrapper
-    private predicate: Quad_Predicate
-    private valueMapping: ValueMapping<T>
-    private termMapping: TermMapping<T>
-
     // TODO: Direction
-    constructor(subject: TermWrapper, predicate: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>) {
+    public constructor(private readonly subject: TermWrapper, private readonly predicate: Quad_Predicate, private readonly valueMapping: ValueMapping<T>, private readonly termMapping: TermMapping<T>) {
         this.subject = subject
         this.predicate = predicate
         this.valueMapping = valueMapping
