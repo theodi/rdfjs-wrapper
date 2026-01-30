@@ -4,6 +4,6 @@ import { Vocabulary } from "../Vocabulary.js"
 
 export class MyDataset extends DatasetWrapper {
     public get parents(): Iterable<Parent> {
-        return this.subjectsOf(Parent, Vocabulary.hasChild)
+        return this.subjectsOf(Vocabulary.hasChild, Parent)
     }
 }
