@@ -1,7 +1,7 @@
 import type { ValueMapping } from "./ValueMapping.js"
 import type { TermMapping } from "./TermMapping.js"
 import { WrappingSet } from "./WrappingSet.js"
-import type { DataFactory, DatasetCore, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types"
+import type { DataFactory, DatasetCore, Quad_Object, Quad_Subject, Term } from "@rdfjs/types"
 
 export class TermWrapper {
     public constructor(public readonly term: Term, public readonly dataset: DatasetCore, public readonly factory: DataFactory) {
@@ -11,30 +11,36 @@ export class TermWrapper {
         return (n: TermWrapper) => new constructor(n.term, n.dataset, n.factory)
     }
 
-    protected singular<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T {
+    protected singular<T>(p: string, valueMapping: ValueMapping<T>): T {
+        const predicate = this.factory.namedNode(p)
+
         return valueMapping(
             new TermWrapper(
-                [...this.dataset.match(this.term, p)][0]!.object,
+                [...this.dataset.match(this.term, predicate)][0]!.object,
                 this.dataset,
                 this.factory
             )
         )
     }
 
-    protected singularNullable<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>): T | undefined {
-        for (const q of this.dataset.match(this.term, p)) {
+    protected singularNullable<T>(p: string, valueMapping: ValueMapping<T>): T | undefined {
+        const predicate = this.factory.namedNode(p)
+
+        for (const q of this.dataset.match(this.term, predicate)) {
             return valueMapping(new TermWrapper(q.object, this.dataset, this.factory))
         }
 
         return
     }
 
-    protected objects<T>(p: Quad_Predicate, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>): Set<T> {
+    protected objects<T>(p: string, valueMapping: ValueMapping<T>, termMapping: TermMapping<T>): Set<T> {
         return new WrappingSet(this, p, valueMapping, termMapping)
     }
 
-    protected overwriteNullable<T>(p: Quad_Predicate, value: T | undefined, termMapping: TermMapping<T>): void {
-        for (const q of this.dataset.match(this.term, p)) {
+    protected overwriteNullable<T>(p: string, value: T | undefined, termMapping: TermMapping<T>): void {
+        const predicate = this.factory.namedNode(p)
+
+        for (const q of this.dataset.match(this.term, predicate)) {
             this.dataset.delete(q)
         }
 
@@ -56,11 +62,11 @@ export class TermWrapper {
             return // TODO: throw error?
         }
 
-        const q = this.factory.quad(this.term, p, o.term)
+        const q = this.factory.quad(this.term, predicate, o.term)
         this.dataset.add(q)
     }
 
-    protected overwrite<T>(p: Quad_Predicate, value: T, nodeMapping: TermMapping<T>): void {
+    protected overwrite<T>(p: string, value: T, nodeMapping: TermMapping<T>): void {
         if (value === undefined) {
             throw new Error("value cannot be undefined")
         }

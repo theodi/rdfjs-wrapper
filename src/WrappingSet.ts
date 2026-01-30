@@ -1,11 +1,11 @@
 import { TermWrapper } from "./TermWrapper.js"
 import type { TermMapping } from "./TermMapping.js"
 import type { ValueMapping } from "./ValueMapping.js"
-import type { DatasetCore, Quad, Quad_Object, Quad_Predicate, Quad_Subject } from "@rdfjs/types"
+import type { DatasetCore, Quad, Quad_Object, Quad_Subject } from "@rdfjs/types"
 
 export class WrappingSet<T> implements Set<T> {
     // TODO: Direction
-    public constructor(private readonly subject: TermWrapper, private readonly predicate: Quad_Predicate, private readonly valueMapping: ValueMapping<T>, private readonly termMapping: TermMapping<T>) {
+    public constructor(private readonly subject: TermWrapper, private readonly predicate: string, private readonly valueMapping: ValueMapping<T>, private readonly termMapping: TermMapping<T>) {
         this.subject = subject
         this.predicate = predicate
         this.valueMapping = valueMapping
@@ -29,8 +29,9 @@ export class WrappingSet<T> implements Set<T> {
         }
 
         const o = this.termMapping(value, this.subject.dataset, this.subject.factory)?.term // TODO: guards
+        const p = this.subject.factory.namedNode(this.predicate)
 
-        for (const q of this.subject.dataset.match(this.subject.term, this.predicate, o)) {
+        for (const q of this.subject.dataset.match(this.subject.term, p, o)) {
             this.subject.dataset.delete(q)
         }
 
@@ -77,12 +78,14 @@ export class WrappingSet<T> implements Set<T> {
 
     private quad(value: T): Quad {
         const s = this.subject.term as Quad_Subject // TODO: guard
+        const p = this.subject.factory.namedNode(this.predicate)
         const o = this.termMapping(value, this.subject.dataset, this.subject.factory)?.term as Quad_Object // TODO: guards
-        const q = this.subject.factory.quad(s, this.predicate, o)
+        const q = this.subject.factory.quad(s, p, o)
         return q
     }
 
     private get matches(): DatasetCore {
-        return this.subject.dataset.match(this.subject.term, this.predicate)
+        const p = this.subject.factory.namedNode(this.predicate)
+        return this.subject.dataset.match(this.subject.term, p)
     }
 }

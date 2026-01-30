@@ -1,9 +1,6 @@
-import type { NamedNode } from "@rdfjs/types"
-import { DataFactory } from "n3"
-
-export class Vocabulary {
-    static hasString: NamedNode = DataFactory.namedNode("https://example.org/hasString")
-    static hasChild: NamedNode = DataFactory.namedNode("https://example.org/hasChild")
-    static hasChildSet: NamedNode = DataFactory.namedNode("https://example.org/hasChildSet")
-    static hasName: NamedNode = DataFactory.namedNode("https://example.org/hasName")
-}
+export const Vocabulary = {
+    hasString: "https://example.org/hasString",
+    hasChild: "https://example.org/hasChild",
+    hasChildSet: "https://example.org/hasChildSet",
+    hasName: "https://example.org/hasName",
+} as const

@@ -7,13 +7,11 @@ import type { TermWrapper } from "../TermWrapper.js"
 export function getter(predicate: string, getterArity: GetterArity, valueMapping: ValueMapping<any>, termMapping: TermMapping<any> = TermMappings.stringToLiteral): any {
     return function (target: any, context: ClassGetterDecoratorContext): any {
         return function (this: TermWrapper): any {
-            const p = this.factory.namedNode(predicate)
-
             switch (getterArity) {
                 case GetterArity.Singular:
-                    return this.singular(p, valueMapping)
+                    return this.singular(predicate, valueMapping)
                 case GetterArity.Objects:
-                    return this.objects(p, valueMapping, termMapping)
+                    return this.objects(predicate, valueMapping, termMapping)
             }
         }
     }
