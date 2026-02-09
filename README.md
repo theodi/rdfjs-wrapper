@@ -29,19 +29,63 @@ Practically, to map RDF to objects, you need to:
     1. a corresponding ValueMapping and TermMapping for sets of primitive values
     1. a corresponding TermWrapper for properties returning a class
     1. two corresponding TermWrappers (generally the same) for sets of classes
-1. Each class mutates the underlying Dataset that is passed to it for instantiation
+1. Each class mutates the underlying Dataset that is passed to it at instantiation time
 
 
-## Usage
+## Wrapping RDF
+
+In order to wrap RDF, one needs an underlying data structure. Therefore, both `TermWrapper` and `DatasetWrapper` take an RDF/JS [Dataset](https://rdf.js.org/dataset-spec/#datasetcore-interface) and [Datafactory](https://rdf.js.org/data-model-spec/#datafactory-interface) as constructor parameters.
+
+
+### Wrapping Terms
+
+Term wrapping lets you manipulate data in a graph via class properties.
+
+A [term](https://www.w3.org/TR/rdf12-concepts/#section-terms) wrapper instantiates a class from a term.
+
+For example you can write a `Person` class with one `name` property:
+
+```javascript
+import { TermWrapper } from "https://unpkg.com/rdfjs-wrapper"
+
+class Person extends TermWrapper {
+	get name() {
+		return this.singularNullable("http://example.com/name", ValueMappings.literalToString)
+	}
+
+	set name(value) {
+		this.overwriteNullable("http://example.com/name", value, TermMappings.literalToString)
+}
+```
+
+Assuming the following RDF has been loaded in a dataset `dataset_x`:
+
+```turtle
+PREFIX ex: <http://example.com/>
+
+ex:person1 ex:name "Alice" .
+```
+
+Class usage:
+
+```javascript
+const person1 = new Person(DataFactory.namedNode("http://example.com/person1"), dataset_x, DataFactory)
+
+// Get property
+console.log(person1.name)
+// outputs "Alice"
+
+// Set property
+person1.name = [...person1].reverse().join("")
+console.log(person1.name)
+// outputs "ecilA"
+```
+
 
 ### Wrapping Datasets
 
 Dataset Wrapper allows you to instantiate classes from existing data in a graph.
 
-
-### Wrapping Terms
-
-Term Wrapper allows to manipulate data in a graph via class properties.
 
 
 ## See also
