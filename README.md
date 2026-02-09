@@ -6,9 +6,16 @@
 An [RDF/JS](https://rdf.js.org/data-model-spec/) object mapping library.
 
 
-## Background
+## Purpose
 
-RDF/JS Wrapper facilitates object-oriented programming over RDF (see [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework), [Knowledge Graph](https://en.wikipedia.org/wiki/Knowledge_graph)).
+The purpose of the RDF/JS Wrapper library is to enable idiomatic JavaScript object-oriented programming over RDF with type system support (TypeScript compatible).
+
+In other words, [RDF data](https://en.wikipedia.org/wiki/Resource_Description_Framework) is abstracted away and developers can define standard mapping classes to program over it.
+
+Additionally, standard mapping classes can be defined and reused in any number of context where they are relevant (see for example [@solid/object](https://github.com/solid/object)).
+
+
+## Background
 
 RDF/JS Wrapper uses the interfaces described in the [RDF/JS](https://rdf.js.org/) specifications.
 
@@ -27,9 +34,20 @@ Practically, to map RDF to objects, you need to:
 
 ## Usage
 
+### Wrapping Datasets
+
+Dataset Wrapper allows you to instantiate classes from existing data in a graph.
+
+
 ### Wrapping Terms
 
-### Wrapping Datasets
+Term Wrapper allows to manipulate data in a graph via class properties.
+
+
+## See also
+
+- [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework)
+- [Knowledge Graph](https://en.wikipedia.org/wiki/Knowledge_graph)
 
 
 ## License
