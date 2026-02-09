@@ -84,8 +84,39 @@ console.log(person1.name)
 
 ### Wrapping Datasets
 
-Dataset Wrapper allows you to instantiate classes from existing data in a graph.
+Dataset wrapping lets you find data in a graph that is meant to be wrapped.
 
+For example, you can write a `People` dataset wrapper to find each `Person` in a graph:
+
+```javascript
+class People extends DatasetWrapper {
+	[Symbol.iterator]() {
+		return this.subjectsOf("http://example.com/name", Person)
+	}
+}
+```
+
+Assuming the following RDF has been loaded in a dataset `dataset_y`:
+
+```turtle
+PREFIX ex: <http://example.com/>
+
+ex:person1 ex:name "Alice" .
+ex:person2 ex:name "Bob" .
+```
+
+Dataset Wrapper usage:
+
+```javascript
+const people = new People(dataset_y, DataFactory)
+
+for (const person of people) {
+	console.log(person.name)
+}
+// outputs
+// Alice
+// Bob
+```
 
 
 ## See also
