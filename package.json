@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "npm test",
-    "test": "tsc && tsc -p test && node --test \"**/*.test.js\""
+    "test": "tsc && tsc -p test && node --experimental-test-coverage --test \"**/*.test.js\""
   },
   "keywords": [
     "rdf",
