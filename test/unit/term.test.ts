@@ -1,53 +1,62 @@
 import { DataFactory } from "n3"
 import assert from "node:assert"
 import { describe, it } from "node:test"
-import { ParentDataset } from "./model/ParentDataset.js"
 import { Child } from "./model/Child.js"
-import { datasetFromRdf } from "./datasetFromRdf.js"
+import { datasetFromRdf } from "./util/datasetFromRdf.js"
+import { Parent } from "./model/Parent.js"
 
 
 const rdf = `
 prefix : <https://example.org/>
 <x>
-:hasString "o1" ;
-:hasChild [
-    :hasName "name" ;
-] ;
-:hasChildSet [
-    :hasName "1" ;
-], [
-    :hasName "2" ;
-] .
+    :hasString "o1" ;
+    :hasChild [
+        :hasName "name" ;
+    ] ;
+    :hasChildSet [
+        :hasName "1" ;
+    ], [
+        :hasName "2" ;
+    ] .
 `;
 
 
 describe("Term wrapper", async () => {
-    it("Example test", () => {
-        const parentDataset = new ParentDataset(datasetFromRdf(rdf), DataFactory)
+    const dataset = datasetFromRdf(rdf)
+    const parent = new Parent(DataFactory.namedNode("x"), dataset, DataFactory)
+    const newChild = new Child(DataFactory.blankNode(), dataset, DataFactory)
+    newChild.hasName = "new name"
 
-        for (const p of parentDataset.subjectsOfHasChild) {
-            assert.equal("o1", p.hasString)
-            assert.equal("name", p.hasChild.hasName)
-            for (const c of p.hasChildSet) {
-                // TODO: assertions
-                console.log("p.hasChildSet.hasName", c.hasName);
-            }
+    it("gets single literal to string", () => {
+        assert.equal("o1", parent.hasString)
+    })
 
-            p.hasString = "x"
-            assert.equal("x", p.hasString)
+    it("sets single literal to string", () => {
+        parent.hasString = "xxxxx"
+        assert.equal("xxxxx", parent.hasString)
+    })
 
-            const newNode = DataFactory.namedNode("example.com/s")
-            const newChild = new Child(newNode, parentDataset, DataFactory)
-            newChild.hasName = "new name"
-            p.hasChild = newChild
+    it("gets single wrapped term", () => {
+        assert.equal("name", parent.hasChild.hasName)
+    })
 
-            assert.equal("new name", p.hasChild.hasName)
+    it("sets single wrapped term", () => {
+        parent.hasChild = newChild
+        assert.equal("new name", parent.hasChild.hasName)
+    })
 
-            p.hasChildSet.add(newChild)
-            for (const c of p.hasChildSet) {
-                // TODO: assertions
-                console.log("p.hasChildSet.hasName modified", c.hasName);
-            }
+    it("gets set of wrapped terms", () => {
+        assert.equal(2, parent.hasChildSet.size)
+    })
+
+    it("adds to set of wrapped terms", () => {
+        parent.hasChildSet.add(newChild)
+        assert.equal(3, parent.hasChildSet.size)
+    })
+
+    it("gets to set of wrapped terms' single literal to string", () => {
+        for (const child of parent.hasChildSet) {
+            assert.equal(true, ["1", "2", "new name"].includes(child.hasName!))
         }
     })
 })

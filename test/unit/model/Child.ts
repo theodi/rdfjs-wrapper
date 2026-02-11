@@ -3,7 +3,7 @@ import { Vocabulary } from "../Vocabulary.js"
 
 export class Child extends TermWrapper {
     public get hasName(): string | undefined {
-        return this.singular(Vocabulary.hasName, ValueMappings.literalToString)
+        return this.singularNullable(Vocabulary.hasName, ValueMappings.literalToString)
     }
 
     public set hasName(value: string | undefined) {

@@ -3,21 +3,22 @@ import assert from "node:assert"
 import { describe, it } from "node:test"
 import { ParentDataset } from "./model/ParentDataset.js"
 import { Child } from "./model/Child.js"
-import { datasetFromRdf } from "./datasetFromRdf.js"
+import { datasetFromRdf } from "./util/datasetFromRdf.js"
 
 
 const rdf = `
 prefix : <https://example.org/>
 <x>
-:hasString "o1" ;
-:hasChild [
-    :hasName "name" ;
-] ;
-:hasChildSet [
-    :hasName "1" ;
-], [
-    :hasName "2" ;
-] .
+    a :Parent ;
+    :hasString "o1" ;
+    :hasChild [
+        :hasName "name" ;
+    ] ;
+    :hasChildSet [
+        :hasName "1" ;
+    ], [
+        :hasName "2" ;
+    ] .
 `;
 
 

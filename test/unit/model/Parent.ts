@@ -8,7 +8,7 @@ export class Parent extends TermWrapper {
     }
 
     public set hasString(value: string | undefined) {
-        this.overwriteNullable(Vocabulary.hasString, value, TermMappings.stringToLiteral)
+        this.overwrite(Vocabulary.hasString, value, TermMappings.stringToLiteral)
     }
 
     public get hasChild(): Child {
