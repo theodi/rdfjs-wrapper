@@ -1,5 +1,5 @@
-import { Child } from "./Child.js"
 import { TermMappings, TermWrapper, ValueMappings } from "@rdfjs/wrapper"
+import { Child } from "./Child.js"
 import { Vocabulary } from "../Vocabulary.js"
 
 export class Parent extends TermWrapper {

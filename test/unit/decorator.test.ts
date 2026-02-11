@@ -1,6 +1,6 @@
-import { DataFactory } from "n3"
 import assert from "node:assert"
 import { describe, it } from "node:test"
+import { DataFactory } from "n3"
 import { datasetFromRdf } from "./util/datasetFromRdf.js"
 import { ParentDecorated } from "./model/ParentDecorated.js"
 import { ChildDecorated } from "./model/ChildDecorated.js"
