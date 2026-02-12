@@ -4,6 +4,7 @@ import { DataFactory } from "n3"
 import { datasetFromRdf } from "./util/datasetFromRdf.js"
 import { ParentDecorated } from "./model/ParentDecorated.js"
 import { ChildDecorated } from "./model/ChildDecorated.js"
+import { ChildDecoratedNullable } from "./model/ChildDecoratedNullable.js"
 
 
 const rdf = `
@@ -43,5 +44,17 @@ describe("Decorator functions", async () => {
         newChild.hasName = "new name"
         parentDecorated.hasChild = newChild
         assert.equal("new name", parentDecorated.hasChild.hasName)
+    })
+
+    it("gets singular nullable value via decorator", () => {
+        const childDataset = datasetFromRdf(`prefix : <https://example.org/>\n<c> :hasName "cname" .`)
+        const child = new ChildDecoratedNullable(DataFactory.namedNode("c"), childDataset, DataFactory)
+        assert.equal("cname", child.hasName)
+    })
+
+    it("returns undefined for singular nullable via decorator when no value", () => {
+        const emptyDataset = datasetFromRdf(`prefix : <https://example.org/>\n<c> :hasString "only" .`)
+        const child = new ChildDecoratedNullable(DataFactory.namedNode("c"), emptyDataset, DataFactory)
+        assert.equal(undefined, child.hasName)
     })
 })

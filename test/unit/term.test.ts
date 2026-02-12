@@ -4,6 +4,7 @@ import { DataFactory } from "n3"
 import { Child } from "./model/Child.js"
 import { datasetFromRdf } from "./util/datasetFromRdf.js"
 import { Parent } from "./model/Parent.js"
+import { Vocabulary } from "./Vocabulary.js"
 
 
 const rdf = `
@@ -64,5 +65,19 @@ describe("Term wrapper", async () => {
 
     it("gets recursive wrapped term", () => {
         assert.equal(true, parent.term.equals(parent.hasRecursive.hasRecursive.hasRecursive.term))
+    })
+
+    it("throws on singular when no value is found", () => {
+        const empty = datasetFromRdf(`prefix : <https://example.org/>\n<y> :hasString "only" .`)
+        const orphan = new Parent(DataFactory.namedNode("y"), empty, DataFactory)
+        assert.throws(() => orphan.hasChild, {
+            message: `No value found for predicate ${Vocabulary.hasChild} on term y`,
+        })
+    })
+
+    it("returns undefined on singularNullable when no value is found", () => {
+        const empty = datasetFromRdf(`prefix : <https://example.org/>\n<y> :hasString "only" .`)
+        const child = new Child(DataFactory.namedNode("y"), empty, DataFactory)
+        assert.equal(undefined, child.hasName)
     })
 })
