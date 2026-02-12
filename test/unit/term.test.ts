@@ -17,7 +17,9 @@ prefix : <https://example.org/>
         :hasName "1" ;
     ], [
         :hasName "2" ;
-    ] .
+    ] ;
+    :hasRecursive <x> ;
+.
 `;
 
 
@@ -58,5 +60,9 @@ describe("Term wrapper", async () => {
         for (const child of parent.hasChildSet) {
             assert.equal(true, ["1", "2", "new name"].includes(child.hasName!))
         }
+    })
+
+    it("gets recursive wrapped term", () => {
+        assert.equal(true, parent.term.equals(parent.hasRecursive.hasRecursive.hasRecursive.term))
     })
 })

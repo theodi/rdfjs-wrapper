@@ -22,4 +22,8 @@ export class Parent extends TermWrapper {
     public get hasChildSet(): Set<Child> {
         return this.objects(Vocabulary.hasChildSet, TermWrapper.as(Child), TermWrapper.as(Child))
     }
+
+    public get hasRecursive(): Parent {
+        return this.singular(Vocabulary.hasRecursive, TermWrapper.as(Parent))
+    }
 }
