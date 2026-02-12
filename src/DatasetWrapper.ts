@@ -4,13 +4,13 @@ import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 type TermWrapperConstructor<T> = new (term: Term, dataset: DatasetCore, factory: DataFactory) => T
 
 export class DatasetWrapper extends DatasetCoreBase {
-    protected* subjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, object?: string | Term, graph?: string): Iterable<T> {
+    protected* subjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string | Term, object?: string | Term, graph?: string | Term): Iterable<T> {
         for (const q of this.match(undefined, toTerm(predicate, this.factory), toTerm(object, this.factory), toTerm(graph, this.factory))) {
             yield new termWrapper(q.subject, this, this.factory)
         }
     }
 
-    protected* objectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, subject?: string | Term, graph?: string): Iterable<T> {
+    protected* objectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string | Term, subject?: string | Term, graph?: string | Term): Iterable<T> {
         for (const q of this.match(toTerm(subject, this.factory), toTerm(predicate, this.factory), undefined, toTerm(graph, this.factory))) {
             yield new termWrapper(q.object, this, this.factory)
         }
