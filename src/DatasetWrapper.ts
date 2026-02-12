@@ -4,8 +4,10 @@ import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 type TermWrapperConstructor<T> = new (term: Term, dataset: DatasetCore, factory: DataFactory) => T
 
 export class DatasetWrapper extends DatasetCoreBase {
-    protected subjectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {
-        return this.matchSubjectsOf(termWrapper, predicate)
+    protected* subjectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {
+        for (const q of this.matchSubjectsOf(termWrapper, predicate)) {
+            yield q
+        }
     }
 
     protected* matchSubjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, object?: string, graph?: string): Iterable<T> {
@@ -19,7 +21,9 @@ export class DatasetWrapper extends DatasetCoreBase {
     }
 
     protected* objectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {
-        return this.matchObjectsOf(termWrapper, undefined, predicate)
+        for (const q of this.matchObjectsOf(termWrapper, undefined, predicate)) {
+            yield q
+        }
     }
 
     protected* matchObjectsOf<T>(termWrapper: TermWrapperConstructor<T>, subject?: string, predicate?: string, graph?: string): Iterable<T> {
@@ -32,10 +36,9 @@ export class DatasetWrapper extends DatasetCoreBase {
         }
     }
 
-    protected instancesOf<T>(classTerm: string, constructor: TermWrapperConstructor<T>): Iterable<T> {
-        // TODO: Vocab
-        const rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-
-        return this.matchSubjectsOf(constructor, rdfType, classTerm)
+    protected* instancesOf<T>(classTerm: string, constructor: TermWrapperConstructor<T>): Iterable<T> {
+        for (const q of this.matchSubjectsOf(constructor, RDF.type, classTerm)) {
+            yield q
+        }
     }
 }
