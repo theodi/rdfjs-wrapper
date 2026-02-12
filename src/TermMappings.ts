@@ -1,5 +1,5 @@
-import { TermWrapper } from "./TermWrapper.js"
 import type { DataFactory, DatasetCore } from "@rdfjs/types"
+import { TermWrapper } from "./TermWrapper.js"
 
 export namespace TermMappings {
     export function stringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {

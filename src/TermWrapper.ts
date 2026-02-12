@@ -1,7 +1,7 @@
+import type { DataFactory, DatasetCore, Quad_Object, Quad_Subject, Term } from "@rdfjs/types"
 import type { ValueMapping } from "./ValueMapping.js"
 import type { TermMapping } from "./TermMapping.js"
 import { WrappingSet } from "./WrappingSet.js"
-import type { DataFactory, DatasetCore, Quad_Object, Quad_Subject, Term } from "@rdfjs/types"
 
 export class TermWrapper {
     public constructor(public readonly term: Term, public readonly dataset: DatasetCore, public readonly factory: DataFactory) {

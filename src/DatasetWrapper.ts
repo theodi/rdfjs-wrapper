@@ -1,5 +1,6 @@
-import { DatasetCoreBase } from "./DatasetCoreBase.js"
 import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
+import { DatasetCoreBase } from "./DatasetCoreBase.js"
+import { RDF } from "./Vocabulary.js"
 
 type TermWrapperConstructor<T> = new (term: Term, dataset: DatasetCore, factory: DataFactory) => T
 

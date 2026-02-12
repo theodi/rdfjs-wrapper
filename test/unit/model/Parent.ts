@@ -3,11 +3,11 @@ import { Child } from "./Child.js"
 import { Vocabulary } from "../Vocabulary.js"
 
 export class Parent extends TermWrapper {
-    public get hasString(): string | undefined {
+    public get hasString(): string {
         return this.singular(Vocabulary.hasString, ValueMappings.literalToString)
     }
 
-    public set hasString(value: string | undefined) {
+    public set hasString(value: string ) {
         this.overwrite(Vocabulary.hasString, value, TermMappings.stringToLiteral)
     }
 

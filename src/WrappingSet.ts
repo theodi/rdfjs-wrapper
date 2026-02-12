@@ -1,7 +1,7 @@
-import { TermWrapper } from "./TermWrapper.js"
 import type { TermMapping } from "./TermMapping.js"
 import type { ValueMapping } from "./ValueMapping.js"
 import type { DatasetCore, Quad, Quad_Object, Quad_Subject } from "@rdfjs/types"
+import { TermWrapper } from "./TermWrapper.js"
 
 export class WrappingSet<T> implements Set<T> {
     // TODO: Direction
