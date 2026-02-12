@@ -4,22 +4,14 @@ import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 type TermWrapperConstructor<T> = new (term: Term, dataset: DatasetCore, factory: DataFactory) => T
 
 export class DatasetWrapper extends DatasetCoreBase {
-    protected* subjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, object?: string, graph?: string): Iterable<T> {
-        const p = predicate ? this.factory.namedNode(predicate) : undefined
-        const o = object ? this.factory.namedNode(object) : undefined
-        const g = graph ? this.factory.namedNode(graph) : undefined
-
-        for (const q of this.match(undefined, p, o, g)) {
+    protected* subjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, object?: string | Term, graph?: string): Iterable<T> {
+        for (const q of this.match(undefined, toTerm(predicate, this.factory), toTerm(object, this.factory), toTerm(graph, this.factory))) {
             yield new termWrapper(q.subject, this, this.factory)
         }
     }
 
-    protected* objectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, subject?: string, graph?: string): Iterable<T> {
-        const s = subject ? this.factory.namedNode(subject) : undefined
-        const p = predicate ? this.factory.namedNode(predicate) : undefined
-        const g = graph ? this.factory.namedNode(graph) : undefined
-
-        for (const q of this.match(s, p, undefined, g)) {
+    protected* objectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, subject?: string | Term, graph?: string): Iterable<T> {
+        for (const q of this.match(toTerm(subject, this.factory), toTerm(predicate, this.factory), undefined, toTerm(graph, this.factory))) {
             yield new termWrapper(q.object, this, this.factory)
         }
     }
@@ -30,4 +22,8 @@ export class DatasetWrapper extends DatasetCoreBase {
 
         return this.subjectsOf(constructor, rdfType, classTerm)
     }
+}
+
+function toTerm(value: string | Term | undefined, factory: DataFactory): Term | undefined {
+    return typeof value === "string" ? factory.namedNode(value) : value
 }
