@@ -14,15 +14,15 @@ export class TermWrapper {
     protected singular<T>(p: string, valueMapping: ValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
 
-        let object: Term | undefined;
+        let object: Term | undefined
 
         // Libraries such as N3.js may not immediately materialize a dataset,
         // but instead return an iterator that materializes matching quads on demand.
         // Spreading this iterator with [...this.dataset.match(this.term, predicate)]
         // would materialize all matching quads, even though we only need the first one.
         for (const q of this.dataset.match(this.term, predicate)) {
-            object = q.object;
-            break;
+            object = q.object
+            break
         }
 
         if (object === undefined) {
