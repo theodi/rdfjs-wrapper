@@ -91,7 +91,7 @@ For example, you can write a `People` dataset wrapper to find each `Person` in a
 ```javascript
 class People extends DatasetWrapper {
 	[Symbol.iterator]() {
-		return this.subjectsOf("http://example.com/name", Person)
+		return this.subjectsOf(Person, "http://example.com/name")
 	}
 }
 ```
