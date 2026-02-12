@@ -14,9 +14,24 @@ export class TermWrapper {
     protected singular<T>(p: string, valueMapping: ValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
 
+        let object: Term | undefined;
+
+        // Libraries such as N3.js will not immediately materialize a dataset
+        // and instead return an iterator that will materialize quads on demand.
+        // This means that we cannot we should do [...this.dataset.match(this.term, predicate)]
+        // to get all quads at once, as this will materialize the entire dataset.
+        for (const q of this.dataset.match(this.term, predicate)) {
+            object = q.object;
+            break;
+        }
+
+        if (object === undefined) {
+            throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
+        }
+
         return valueMapping(
             new TermWrapper(
-                [...this.dataset.match(this.term, predicate)][0]!.object,
+                object,
                 this.dataset,
                 this.factory
             )
