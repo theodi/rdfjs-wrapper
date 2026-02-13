@@ -7,6 +7,7 @@ import { datasetFromRdf } from "./util/datasetFromRdf.js"
 
 const rdf = `
 prefix : <https://example.org/>
+
 <x>
     a :Parent ;
     :hasString "o1" ;
@@ -29,10 +30,10 @@ prefix : <https://example.org/>
 `;
 
 
-describe("Dataset wrapper", async () => {
+describe("Dataset Wrappers", async () => {
     const parentDataset = new ParentDataset(datasetFromRdf(rdf), DataFactory)
 
-    it("gets instances of Parent as Parent", () => {
+    it("get instances of Parent as Parent", () => {
         assert.equal(Array.from(parentDataset.instancesOfParent).length, 1)
 
         for (const parent of parentDataset.instancesOfParent) {
@@ -40,7 +41,7 @@ describe("Dataset wrapper", async () => {
         }
     })
 
-    it("gets subjects of hasChild as Parent instances", () => {
+    it("get subjects of hasChild as Parent instances", () => {
         assert.equal(Array.from(parentDataset.subjectsOfHasChild).length, 2)
 
         for (const parent of parentDataset.subjectsOfHasChild) {
@@ -48,7 +49,7 @@ describe("Dataset wrapper", async () => {
         }
     })
 
-    it("gets matching subjects of `?s ?p :Parent ?g` as Parent instances", () => {
+    it("get matching subjects of `?s ?p :Parent ?g` as Parent instances", () => {
         assert.equal((Array.from(parentDataset.matchSubjectsOfAnythingParent).length), 1)
 
         for (const parent of parentDataset.matchSubjectsOfAnythingParent) {
@@ -56,7 +57,7 @@ describe("Dataset wrapper", async () => {
         }
     })
 
-    it("gets objects of hasChild as Child instances", () => {
+    it("get objects of hasChild as Child instances", () => {
         assert.equal((Array.from(parentDataset.objectsOfHasChild).length), 2)
 
         for (const child of parentDataset.objectsOfHasChild) {

@@ -8,6 +8,7 @@ import { Parent } from "./model/Parent.js"
 
 const rdf = `
 prefix : <https://example.org/>
+
 <x>
     :hasString "o1" ;
     :hasChild [
@@ -64,9 +65,9 @@ describe("Term Wrappers", async () => {
             parent.hasChildSet.add(newChild)
             assert.equal(3, parent.hasChildSet.size)
         })
+    })
 
-        it("get recursive wrapped term", () => {
-            assert.equal(true, parent.term.equals(parent.hasRecursive.hasRecursive.hasRecursive.term))
-        })
+    it("get recursive wrapped term", () => {
+        assert.equal(true, parent.term.equals(parent.hasRecursive.hasRecursive.hasRecursive.term))
     })
 })
