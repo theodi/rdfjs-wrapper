@@ -1,7 +1,7 @@
 import type { TermMapping } from "../type/TermMapping.js"
 import type { TermWrapper } from "../TermWrapper.js"
 
-import { SetterArity } from "./SetterArity_.js"
+import { SetterArity } from "./SetterArity.js"
 
 
 export function setter(predicate: string, setterArity: SetterArity, termMapping: TermMapping<any>): any {
