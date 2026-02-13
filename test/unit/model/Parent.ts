@@ -11,6 +11,14 @@ export class Parent extends TermWrapper {
         this.overwrite(Vocabulary.hasString, value, TermMappings.stringToLiteral)
     }
 
+    public get hasDate(): Date {
+        return this.singular(Vocabulary.hasDate, ValueMappings.literalToDate)
+    }
+
+    public set hasDate(value: Date ) {
+        this.overwrite(Vocabulary.hasDate, value, TermMappings.dateToLiteral)
+    }
+
     public get hasChild(): Child {
         return this.singular(Vocabulary.hasChild, TermWrapper.as(Child))
     }
