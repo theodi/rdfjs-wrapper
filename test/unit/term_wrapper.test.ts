@@ -87,6 +87,10 @@ describe("Term Wrappers", async () => {
             assert.equal(parent.hasString, "o1 edited")
         })
 
+        it("set single literal to undefined throws", () => {
+            assert.throws(() => { parent.hasString = undefined as any })
+        })
+
         it("set single nullable literal to string", () => {
             parent.hasNullableString = "o2 edited"
             assert.equal(parent.hasNullableString, "o2 edited")

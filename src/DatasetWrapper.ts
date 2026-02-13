@@ -1,5 +1,5 @@
 import type { DataFactory, DatasetCore, Quad, Term } from "@rdfjs/types"
-import type {ITermWrapperConstructor } from "./type/ITermWrapperConstructor.js"
+import type { ITermWrapperConstructor } from "./type/ITermWrapperConstructor.js"
 
 import { RDF } from "./vocabulary/RDF.js"
 

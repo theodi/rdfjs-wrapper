@@ -44,6 +44,7 @@ export class TermWrapper {
             this.dataset.delete(q)
         }
 
+        // TODO: TermMapping undefined: Return after deleting quads if undefined
         if (value === undefined) {
             return
         }
@@ -54,6 +55,7 @@ export class TermWrapper {
             return // TODO: throw error?
         }
 
+        // TODO: TermMapping undefined: the term mapping is not invoked if undefined
         const o = termMapping(value, this.dataset, this.factory)
 
         if (o === undefined) {
