@@ -1,4 +1,5 @@
-import type { TermWrapper } from "./TermWrapper.js"
+import type { TermWrapper } from "../TermWrapper.js"
+
 
 export namespace ValueMappings {
     export function literalToString(n: TermWrapper): string {

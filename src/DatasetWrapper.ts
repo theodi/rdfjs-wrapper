@@ -1,8 +1,39 @@
-import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
-import { DatasetCoreBase } from "./DatasetCoreBase.js"
-import { RDF } from "./Vocabulary.js"
+import type { DataFactory, DatasetCore, Quad, Term } from "@rdfjs/types"
+import type {TermWrapperConstructor } from "./type/TermWrapperConstructor.js"
 
-type TermWrapperConstructor<T> = new (term: Term, dataset: DatasetCore, factory: DataFactory) => T
+import { RDF } from "./vocabulary/RDF.js"
+
+
+abstract class DatasetCoreBase implements DatasetCore {
+    public constructor(private readonly dataset: DatasetCore, protected readonly factory: DataFactory) {
+    }
+
+    public get size(): number {
+        return this.dataset.size
+    }
+
+    public [Symbol.iterator](): Iterator<Quad> {
+        return this.dataset[Symbol.iterator]()
+    }
+
+    public add(quad: Quad): this {
+        this.dataset.add(quad)
+        return this
+    }
+
+    public delete(quad: Quad): this {
+        this.dataset.delete(quad)
+        return this
+    }
+
+    public has(quad: Quad): boolean {
+        return this.dataset.has(quad)
+    }
+
+    public match(subject?: Term, predicate?: Term, object?: Term, graph?: Term): DatasetCore {
+        return this.dataset.match(subject, predicate, object, graph)
+    }
+}
 
 export class DatasetWrapper extends DatasetCoreBase {
     protected* subjectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {

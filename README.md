@@ -50,18 +50,18 @@ import { TermWrapper } from "https://unpkg.com/rdfjs-wrapper"
 
 class Person extends TermWrapper {
 	get name() {
-		return this.singularNullable("http://example.com/name", ValueMappings.literalToString)
+		return this.singularNullable("https://example.org/name", ValueMappings.literalToString)
 	}
 
 	set name(value) {
-		this.overwriteNullable("http://example.com/name", value, TermMappings.literalToString)
+		this.overwriteNullable("https://example.org/name", value, TermMappings.literalToString)
 }
 ```
 
 Assuming the following RDF has been loaded in a dataset `dataset_x`:
 
 ```turtle
-PREFIX ex: <http://example.com/>
+PREFIX ex: <https://example.org/>
 
 ex:person1 ex:name "Alice" .
 ```
@@ -69,7 +69,7 @@ ex:person1 ex:name "Alice" .
 Class usage:
 
 ```javascript
-const person1 = new Person(DataFactory.namedNode("http://example.com/person1"), dataset_x, DataFactory)
+const person1 = new Person(DataFactory.namedNode("https://example.org/person1"), dataset_x, DataFactory)
 
 // Get property
 console.log(person1.name)
@@ -91,7 +91,7 @@ For example, you can write a `People` dataset wrapper to find each `Person` in a
 ```javascript
 class People extends DatasetWrapper {
 	[Symbol.iterator]() {
-		return this.subjectsOf("http://example.com/name", Person)
+		return this.subjectsOf("https://example.org/name", Person)
 	}
 }
 ```
@@ -99,7 +99,7 @@ class People extends DatasetWrapper {
 Assuming the following RDF has been loaded in a dataset `dataset_y`:
 
 ```turtle
-PREFIX ex: <http://example.com/>
+PREFIX ex: <https://example.org/>
 
 ex:person1 ex:name "Alice" .
 ex:person2 ex:name "Bob" .
