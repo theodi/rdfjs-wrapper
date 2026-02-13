@@ -21,24 +21,24 @@ prefix : <https://example.org/>
     ] .
 `;
 
-describe("Decorator functions", async () => {
+describe("Decorators", async () => {
     const dataset = datasetFromRdf(rdf)
     const parentDecorated = new ParentDecorated(DataFactory.namedNode("x"), dataset, DataFactory)
 
-    it("gets single literal to string", () => {
+    it("get single literal to string", () => {
         assert.equal("o1", parentDecorated.hasString)
     })
 
-    it("sets single literal to string", () => {
+    it("set single literal to string", () => {
         parentDecorated.hasString = "xxxxx"
         assert.equal("xxxxx", parentDecorated.hasString)
     })
 
-    it("gets single wrapped term", () => {
+    it("get single wrapped term", () => {
         assert.equal("name", parentDecorated.hasChild.hasName)
     })
 
-    it("sets single wrapped term", () => {
+    it("set single wrapped term", () => {
         const newChild = new ChildDecorated(DataFactory.blankNode(), dataset, DataFactory)
         newChild.hasName = "new name"
         parentDecorated.hasChild = newChild
