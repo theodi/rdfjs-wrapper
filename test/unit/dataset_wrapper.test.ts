@@ -64,4 +64,12 @@ describe("Dataset Wrappers", async () => {
             assert.equal(["child name 1", "child name 2"].includes(child.hasName!), true)
         }
     })
+
+    it("iterates", () => {
+        assert.equal((Array.from(parentDataset).length), 11)
+
+        for (const x of parentDataset) {
+            assert.equal(x.equals(x), true)
+        }
+    })
 })
