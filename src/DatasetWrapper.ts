@@ -1,5 +1,5 @@
 import type { DataFactory, DatasetCore, Quad, Term } from "@rdfjs/types"
-import type {TermWrapperConstructor } from "./type/TermWrapperConstructor.js"
+import type {ITermWrapperConstructor } from "./type/ITermWrapperConstructor.js"
 
 import { RDF } from "./vocabulary/RDF.js"
 
@@ -36,13 +36,13 @@ abstract class DatasetCoreBase implements DatasetCore {
 }
 
 export class DatasetWrapper extends DatasetCoreBase {
-    protected* subjectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {
+    protected* subjectsOf<T>(predicate: string, termWrapper: ITermWrapperConstructor<T>): Iterable<T> {
         for (const q of this.matchSubjectsOf(termWrapper, predicate)) {
             yield q
         }
     }
 
-    protected* matchSubjectsOf<T>(termWrapper: TermWrapperConstructor<T>, predicate?: string, object?: string, graph?: string): Iterable<T> {
+    protected* matchSubjectsOf<T>(termWrapper: ITermWrapperConstructor<T>, predicate?: string, object?: string, graph?: string): Iterable<T> {
         const p = predicate ? this.factory.namedNode(predicate) : undefined
         const o = object ? this.factory.namedNode(object) : undefined
         const g = graph ? this.factory.namedNode(graph) : undefined
@@ -52,13 +52,13 @@ export class DatasetWrapper extends DatasetCoreBase {
         }
     }
 
-    protected* objectsOf<T>(predicate: string, termWrapper: TermWrapperConstructor<T>): Iterable<T> {
+    protected* objectsOf<T>(predicate: string, termWrapper: ITermWrapperConstructor<T>): Iterable<T> {
         for (const q of this.matchObjectsOf(termWrapper, undefined, predicate)) {
             yield q
         }
     }
 
-    protected* matchObjectsOf<T>(termWrapper: TermWrapperConstructor<T>, subject?: string, predicate?: string, graph?: string): Iterable<T> {
+    protected* matchObjectsOf<T>(termWrapper: ITermWrapperConstructor<T>, subject?: string, predicate?: string, graph?: string): Iterable<T> {
         const s = subject ? this.factory.namedNode(subject) : undefined
         const p = predicate ? this.factory.namedNode(predicate) : undefined
         const g = graph ? this.factory.namedNode(graph) : undefined
@@ -68,7 +68,7 @@ export class DatasetWrapper extends DatasetCoreBase {
         }
     }
 
-    protected* instancesOf<T>(type: string, constructor: TermWrapperConstructor<T>): Iterable<T> {
+    protected* instancesOf<T>(type: string, constructor: ITermWrapperConstructor<T>): Iterable<T> {
         for (const q of this.matchSubjectsOf(constructor, RDF.type, type)) {
             yield q
         }

@@ -5,7 +5,7 @@ import type { TermWrapper } from "../TermWrapper.js"
  * Read from the RDF dataset
  * Transform RDF Terms to JavaScript primitive types
 */
-export namespace ValueMappings {
+export namespace ValueMapping {
     export function literalToString(termWrapper: TermWrapper): string {
         return termWrapper.term.value
     }

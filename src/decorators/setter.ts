@@ -1,10 +1,10 @@
-import type { TermMapping } from "../type/TermMapping.js"
+import type { ITermMapping } from "../type/ITermMapping.js"
 import type { TermWrapper } from "../TermWrapper.js"
 
 import { SetterArity } from "./SetterArity.js"
 
 
-export function setter(predicate: string, setterArity: SetterArity, termMapping: TermMapping<any>): any {
+export function setter(predicate: string, setterArity: SetterArity, termMapping: ITermMapping<any>): any {
     return function (target: any, context: ClassSetterDecoratorContext): any {
         return function (this: TermWrapper, value: any): void {
             switch (setterArity) {

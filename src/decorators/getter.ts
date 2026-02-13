@@ -1,12 +1,12 @@
-import type { TermMapping } from "../type/TermMapping.js"
-import type { ValueMapping } from "../type/ValueMapping.js"
+import type { ITermMapping } from "../type/ITermMapping.js"
+import type { IValueMapping } from "../type/IValueMapping.js"
 import type { TermWrapper } from "../TermWrapper.js"
 
 import { GetterArity } from "./GetterArity.js"
-import { TermMappings } from "../mapping/TermMappings.js"
+import { TermMapping } from "../mapping/TermMapping.js"
 
 
-export function getter(predicate: string, getterArity: GetterArity, valueMapping: ValueMapping<any>, termMapping: TermMapping<any> = TermMappings.stringToLiteral): any {
+export function getter(predicate: string, getterArity: GetterArity, valueMapping: IValueMapping<any>, termMapping: ITermMapping<any> = TermMapping.stringToLiteral): any {
     return function (target: any, context: ClassGetterDecoratorContext): any {
         return function (this: TermWrapper): any {
             switch (getterArity) {
