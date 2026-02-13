@@ -11,6 +11,8 @@ prefix : <https://example.org/>
 
 <x>
     :hasString "o1" ;
+    :hasTooManySingularString "o3", "o4" ;
+    :hasNullableString "o2" ;
     :hasDate "1969-01-01" ;
     :hasNumber "1" ;
     :hasIri <https://example.org> ;
@@ -36,6 +38,20 @@ describe("Term Wrappers", async () => {
     describe("Term Mappings", async () => {
         it("get single literal to string", () => {
             assert.equal(parent.hasString, "o1")
+        })
+
+        it("get single literal to string throws if more than 1 error", () => {
+            // TODO: Test for specific errors
+            assert.throws(() => parent.hasTooManySingularString)
+        })
+
+        it("get single literal to string throws if no value", () => {
+            // TODO: Test for specific errors
+            assert.throws(() => parent.hasNoSingularString)
+        })
+
+        it("get single nullable literal to string", () => {
+            assert.equal(parent.hasNullableString, "o2")
         })
 
         it("get single date to date", () => {
@@ -67,8 +83,20 @@ describe("Term Wrappers", async () => {
 
     describe("Value Mappings", async () => {
         it("set single literal to string", () => {
-            parent.hasString = "xxxxx"
-            assert.equal("xxxxx", parent.hasString)
+            parent.hasString = "o1 edited"
+            assert.equal(parent.hasString, "o1 edited")
+        })
+
+        it("set single nullable literal to string", () => {
+            parent.hasNullableString = "o2 edited"
+            assert.equal(parent.hasNullableString, "o2 edited")
+        })
+
+        it("set single nullable literal to undefined", () => {
+            assert.equal(parent.dataset.size, 15)
+            parent.hasNullableString = undefined
+            assert.equal(parent.hasNullableString, undefined)
+            assert.equal(parent.dataset.size, 14)
         })
 
         it("set single date to date", () => {

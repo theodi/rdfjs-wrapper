@@ -4,11 +4,27 @@ import { Example } from "../vocabulary/Example.js"
 
 export class Parent extends TermWrapper {
     public get hasString(): string {
-        return this.singular(Vocabulary.hasString, ValueMappings.literalToString)
+        return this.singular(Example.hasString, ValueMappings.literalToString)
     }
 
     public set hasString(value: string ) {
-        this.overwrite(Vocabulary.hasString, value, TermMappings.stringToLiteral)
+        this.overwrite(Example.hasString, value, TermMappings.stringToLiteral)
+    }
+
+    public get hasNoSingularString(): string {
+        return this.singular(Example.hasNoSingularString, ValueMappings.literalToString)
+    }
+
+    public get hasTooManySingularString(): string {
+        return this.singular(Example.hasTooManySingularString, ValueMappings.literalToString)
+    }
+
+    public get hasNullableString(): string | undefined {
+        return this.singularNullable(Example.hasNullableString, ValueMappings.literalToString)
+    }
+
+    public set hasNullableString(value: string | undefined ) {
+        this.overwriteNullable(Example.hasNullableString, value, TermMappings.stringToLiteral)
     }
 
     public get hasDate(): Date {

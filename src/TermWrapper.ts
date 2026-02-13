@@ -13,14 +13,18 @@ export class TermWrapper {
 
     protected singular<T>(p: string, valueMapping: ValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
+        const match = this.dataset.match(this.term, predicate)
 
-        return valueMapping(
-            new TermWrapper(
-                [...this.dataset.match(this.term, predicate)][0]!.object,
-                this.dataset,
-                this.factory
-            )
-        )
+        // TODO: Expose standard errors
+        if (match.size > 1) {
+            throw new Error(`More than one value for predicate ${p} on term ${this.term.value}`)
+        }
+
+        for (const q of this.dataset.match(this.term, predicate)) {
+            return valueMapping(new TermWrapper(q.object, this.dataset, this.factory))
+        }
+
+        throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
     }
 
     protected singularNullable<T>(p: string, valueMapping: ValueMapping<T>): T | undefined {
@@ -48,6 +52,8 @@ export class TermWrapper {
             return
         }
 
+        // TODO: Do we really need to test if this.term is a Quad Subject here?
+        // @Samu I imagine this is tested at instantiation time in the constructor if at all
         if (!TermWrapper.isQuadSubject(this.term)) {
             return // TODO: throw error?
         }
