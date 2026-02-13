@@ -9,7 +9,7 @@ export class ParentDecorated extends TermWrapper {
         throw new Error
     }
 
-    @setter(Vocabulary.hasString, SetterArity.Overwrite, TermMappings.stringToLiteral)
+    @setter(Vocabulary.hasString, SetterArity.OverwriteNullable, TermMappings.stringToLiteral)
     public set hasString(_: string) {
     }
 
@@ -20,6 +20,11 @@ export class ParentDecorated extends TermWrapper {
 
     @setter(Vocabulary.hasChild, SetterArity.Overwrite, TermWrapper.as(ChildDecorated))
     public set hasChild(_: ChildDecorated) {
+        throw new Error
+    }
+
+    @getter(Vocabulary.hasChildSet, GetterArity.Objects, TermWrapper.as(ChildDecorated))
+    public get hasChildSet(): Set<ChildDecorated> {
         throw new Error
     }
 }

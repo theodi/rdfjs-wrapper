@@ -12,36 +12,46 @@ prefix : <https://example.org/>
 <x>
     :hasString "o1" ;
     :hasChild [
-        :hasName "name" ;
+        :hasName "child name 1" ;
     ] ;
     :hasChildSet [
-        :hasName "1" ;
+        :hasName "child name 2" ;
     ], [
-        :hasName "2" ;
+        :hasName "child name 3" ;
     ] .
 `;
 
 describe("Decorators", async () => {
     const dataset = datasetFromRdf(rdf)
     const parentDecorated = new ParentDecorated(DataFactory.namedNode("x"), dataset, DataFactory)
+    const newChild = new ChildDecorated(DataFactory.blankNode(), dataset, DataFactory)
+    newChild.hasName = "new name"
 
-    it("get single literal to string", () => {
-        assert.equal("o1", parentDecorated.hasString)
+    describe("Term Mappings", async () => {
+        it("get single literal to string", () => {
+            assert.equal("o1", parentDecorated.hasString)
+        })
+
+        it("get single wrapped term", () => {
+            assert.equal("child name 1", parentDecorated.hasChild.hasName)
+        })
+
+        it("get set of wrapped terms' single literal to string", () => {
+            for (const child of parentDecorated.hasChildSet) {
+                assert.equal(true, ["child name 2", "child name 3"].includes(child.hasName!))
+            }
+        })
     })
 
-    it("set single literal to string", () => {
-        parentDecorated.hasString = "xxxxx"
-        assert.equal("xxxxx", parentDecorated.hasString)
-    })
+    describe("Value Mappings", async () => {
+        it("set single literal to string", () => {
+            parentDecorated.hasString = "xxxxx"
+            assert.equal("xxxxx", parentDecorated.hasString)
+        })
 
-    it("get single wrapped term", () => {
-        assert.equal("name", parentDecorated.hasChild.hasName)
-    })
-
-    it("set single wrapped term", () => {
-        const newChild = new ChildDecorated(DataFactory.blankNode(), dataset, DataFactory)
-        newChild.hasName = "new name"
-        parentDecorated.hasChild = newChild
-        assert.equal("new name", parentDecorated.hasChild.hasName)
+        it("set single wrapped term", () => {
+            parentDecorated.hasChild = newChild
+            assert.equal("new name", parentDecorated.hasChild.hasName)
+        })
     })
 })
