@@ -3,38 +3,42 @@ import type { DataFactory, DatasetCore } from "@rdfjs/types"
 import { TermWrapper } from "../TermWrapper.js"
 
 
+/*
+ * Write to the RDF dataset
+ * Transform RDF Terms to JavaScript primitive types
+*/
 export namespace TermMappings {
-    export function stringToLiteral(v: string | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
+    export function stringToLiteral(value: string | undefined, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
         // TODO: Check setting of undefined values
-        if (v === undefined) {
+        if (value === undefined) {
             return undefined
         }
 
-        return new TermWrapper(f.literal(v), d, f)
+        return new TermWrapper(factory.literal(value), dataset, factory)
     }
 
-    export function dateToLiteral(v: Date | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
-        if (v === undefined) {
+    export function dateToLiteral(value: Date | undefined, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
+        if (value === undefined) {
             return undefined
         }
 
-        return new TermWrapper(f.literal(v.toISOString(), f.namedNode("http://www.w3.org/2001/XMLSchema#date")), d, f)
+        return new TermWrapper(factory.literal(value.toISOString(), factory.namedNode("http://www.w3.org/2001/XMLSchema#date")), dataset, factory)
     }
 
-    export function numberToLiteral(v: number | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
-        if (v === undefined) {
+    export function numberToLiteral(value: number | undefined, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
+        if (value === undefined) {
             return undefined
         }
 
         // TODO: Think about other types corresponding to number
-        return new TermWrapper(f.literal(v.toString(), f.namedNode("http://www.w3.org/2001/XMLSchema#double")), d, f)
+        return new TermWrapper(factory.literal(value.toString(), factory.namedNode("http://www.w3.org/2001/XMLSchema#double")), dataset, factory)
     }
 
-    export function stringToIri(v: string | undefined, d: DatasetCore, f: DataFactory): TermWrapper | undefined {
-        if (v === undefined) {
+    export function stringToIri(value: string | undefined, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
+        if (value === undefined) {
             return undefined
         }
 
-        return new TermWrapper(f.namedNode(v), d, f)
+        return new TermWrapper(factory.namedNode(value), dataset, factory)
     }
 }

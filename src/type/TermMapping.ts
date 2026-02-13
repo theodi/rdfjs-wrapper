@@ -3,5 +3,5 @@ import type { TermWrapper } from "../TermWrapper.js"
 
 
 export interface TermMapping<T> {
-    (v: T, d: DatasetCore, f: DataFactory): TermWrapper | undefined
+    (value: T, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined
 }

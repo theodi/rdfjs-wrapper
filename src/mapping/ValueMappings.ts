@@ -1,21 +1,24 @@
 import type { TermWrapper } from "../TermWrapper.js"
 
 
+/*
+ * Read from the RDF dataset
+ * Transform RDF Terms to JavaScript primitive types
+*/
 export namespace ValueMappings {
-    export function literalToString(n: TermWrapper): string {
-        // TODO: Check getting of undefined term
-        return n.term.value
+    export function literalToString(termWrapper: TermWrapper): string {
+        return termWrapper.term.value
     }
 
-    export function literalToDate(n: TermWrapper): Date {
-        return new Date(n.term.value)
+    export function literalToDate(termWrapper: TermWrapper): Date {
+        return new Date(termWrapper.term.value)
     }
 
-    export function literalToNumber(n: TermWrapper): number {
-        return Number(n.term.value)
+    export function literalToNumber(termWrapper: TermWrapper): number {
+        return Number(termWrapper.term.value)
     }
 
-    export function iriToString(n: TermWrapper): string {
-        return n.term.value
+    export function iriToString(termWrapper: TermWrapper): string {
+        return termWrapper.term.value
     }
 }

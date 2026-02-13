@@ -68,8 +68,8 @@ export class DatasetWrapper extends DatasetCoreBase {
         }
     }
 
-    protected* instancesOf<T>(classTerm: string, constructor: TermWrapperConstructor<T>): Iterable<T> {
-        for (const q of this.matchSubjectsOf(constructor, RDF.type, classTerm)) {
+    protected* instancesOf<T>(type: string, constructor: TermWrapperConstructor<T>): Iterable<T> {
+        for (const q of this.matchSubjectsOf(constructor, RDF.type, type)) {
             yield q
         }
     }
