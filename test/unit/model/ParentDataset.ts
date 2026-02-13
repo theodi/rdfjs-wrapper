@@ -12,11 +12,15 @@ export class ParentDataset extends DatasetWrapper {
         return this.subjectsOf(Example.hasChild, Parent)
     }
 
-    public get matchSubjectsOfAnythingParent(): Iterable<Parent> {
+    public get objectsOfHasChild(): Iterable<Child> {
+        return this.objectsOf(Example.hasChild, Child)
+    }
+
+    public get matchSubjectsOfPropertyanyObjectparentGraphany(): Iterable<Parent> {
         return this.matchSubjectsOf(Parent, undefined, Example.Parent, undefined)
     }
 
-    public get objectsOfHasChild(): Iterable<Child> {
-        return this.objectsOf(Example.hasChild, Child)
+    public get matchObjectsOfSubjectxPropertyhaschildGraphany(): Iterable<Child> {
+        return this.matchObjectsOf(Child, "x", Example.hasChild, undefined)
     }
 }

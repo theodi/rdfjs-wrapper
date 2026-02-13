@@ -15,9 +15,9 @@ prefix : <https://example.org/>
         :hasName "child name 1" ;
     ] ;
     :hasChildSet [
-        :hasName "1" ;
+        :hasName "child name 2" ;
     ], [
-        :hasName "2" ;
+        :hasName "child name 3" ;
     ] ;
 .
 <y>
@@ -25,7 +25,7 @@ prefix : <https://example.org/>
     :hasChild <z> ;
 .
 <z>
-    :hasName "child name 2" ;
+    :hasName "child name 4" ;
 .
 `;
 
@@ -49,19 +49,27 @@ describe("Dataset Wrappers", async () => {
         }
     })
 
-    it("get matching subjects of `?s ?p :Parent ?g` as Parent instances", () => {
-        assert.equal((Array.from(parentDataset.matchSubjectsOfAnythingParent).length), 1)
-
-        for (const parent of parentDataset.matchSubjectsOfAnythingParent) {
-            assert.equal("o1", parent.hasString)
-        }
-    })
-
     it("get objects of hasChild as Child instances", () => {
         assert.equal((Array.from(parentDataset.objectsOfHasChild).length), 2)
 
         for (const child of parentDataset.objectsOfHasChild) {
-            assert.equal(["child name 1", "child name 2"].includes(child.hasName!), true)
+            assert.equal(["child name 1", "child name 4"].includes(child.hasName!), true)
+        }
+    })
+
+    it("get matching subjects of `?s ?p :Parent ?g` as Parent instances", () => {
+        assert.equal((Array.from(parentDataset.matchSubjectsOfPropertyanyObjectparentGraphany).length), 1)
+
+        for (const parent of parentDataset.matchSubjectsOfPropertyanyObjectparentGraphany) {
+            assert.equal("o1", parent.hasString)
+        }
+    })
+
+    it("get matching objects of `<x> :hasChild ?o ?g` as Child instances", () => {
+        assert.equal((Array.from(parentDataset.matchObjectsOfSubjectxPropertyhaschildGraphany).length), 1)
+
+        for (const child of parentDataset.matchObjectsOfSubjectxPropertyhaschildGraphany) {
+            assert.equal("child name 1", child.hasName)
         }
     })
 
