@@ -2,6 +2,7 @@ import type { TermWrapper } from "./TermWrapper.js"
 
 export namespace ValueMappings {
     export function literalToString(n: TermWrapper): string {
+        // TODO: Check getting of undefined term
         return n.term.value
     }
 
