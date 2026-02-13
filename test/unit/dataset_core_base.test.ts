@@ -7,6 +7,7 @@ import { datasetFromRdf } from "./util/datasetFromRdf.js"
 
 const rdf = `
 prefix : <https://example.org/>
+
 <x>
     a :Parent ;
     :hasString "o1" ;
@@ -19,48 +20,41 @@ prefix : <https://example.org/>
         :hasName "2" ;
     ] ;
 .
-<y>
-    :hasString "o2" ;
-    :hasChild <z> ;
-.
-<z>
-    :hasName "child name 2" ;
-.
 `;
 
 
-describe("Dataset wrapper", async () => {
+describe("Dataset Core Bases", async () => {
     const parentDataset = new ParentDataset(datasetFromRdf(rdf), DataFactory)
+    const newQuad = DataFactory.quad(DataFactory.blankNode(), DataFactory.namedNode("x"), DataFactory.literal("x"))
 
-    it("gets instances of Parent as Parent", () => {
-        assert.equal(Array.from(parentDataset.instancesOfParent).length, 1)
-
-        for (const parent of parentDataset.instancesOfParent) {
-            assert.equal("o1", parent.hasString)
-        }
+    it("get size", () => {
+        assert.equal(parentDataset.size, 8)
     })
 
-    it("gets subjects of hasChild as Parent instances", () => {
-        assert.equal(Array.from(parentDataset.subjectsOfHasChild).length, 2)
-
-        for (const parent of parentDataset.subjectsOfHasChild) {
-            assert.equal(true, ["o1", "o2"].includes(parent.hasString!))
-        }
+    it("add quad", () => {
+        parentDataset.add(newQuad)
+        assert.equal(parentDataset.size, 9)
     })
 
-    it("gets matching subjects of `?s ?p :Parent ?g` as Parent instances", () => {
-        assert.equal((Array.from(parentDataset.matchSubjectsOfAnythingParent).length), 1)
-
-        for (const parent of parentDataset.matchSubjectsOfAnythingParent) {
-            assert.equal("o1", parent.hasString)
-        }
+    it("add the same quad twice", () => {
+        parentDataset.add(newQuad)
+        assert.equal(parentDataset.size, 9)
     })
 
-    it("gets objects of hasChild as Child instances", () => {
-        assert.equal((Array.from(parentDataset.objectsOfHasChild).length), 2)
+    it("has quad", () => {
+        assert.equal(parentDataset.has(newQuad), true)
+    })
 
-        for (const child of parentDataset.objectsOfHasChild) {
-            assert.equal(["child name 1", "child name 2"].includes(child.hasName!), true)
-        }
+    it("delete quad", () => {
+        parentDataset.delete(newQuad)
+        assert.equal(parentDataset.size, 8)
+        assert.equal(parentDataset.has(newQuad), false)
+    })
+
+    it("match quads", () => {
+        parentDataset.add(newQuad)
+        assert.equal((Array.from(parentDataset.match(newQuad.subject, newQuad.predicate, newQuad.object, newQuad.graph)).length), 1)
+        parentDataset.delete(newQuad)
+        assert.equal((Array.from(parentDataset.match(newQuad.subject, newQuad.predicate, newQuad.object, newQuad.graph)).length), 0)
     })
 })
