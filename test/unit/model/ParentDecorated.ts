@@ -1,29 +1,29 @@
 import { getter, GetterArity, setter, SetterArity, TermMappings, TermWrapper, ValueMappings } from "rdfjs-wrapper"
-import { Vocabulary } from "../Vocabulary.js"
+import { Example } from "../vocabulary/Example.js"
 import { ChildDecorated } from "./ChildDecorated.js"
 
 export class ParentDecorated extends TermWrapper {
     // TODO: Getter arity singular nullable??
-    @getter(Vocabulary.hasString, GetterArity.Singular, ValueMappings.literalToString)
+    @getter(Example.hasString, GetterArity.Singular, ValueMappings.literalToString)
     public get hasString(): string {
         throw new Error
     }
 
-    @setter(Vocabulary.hasString, SetterArity.OverwriteNullable, TermMappings.stringToLiteral)
+    @setter(Example.hasString, SetterArity.OverwriteNullable, TermMappings.stringToLiteral)
     public set hasString(_: string) {
     }
 
-    @getter(Vocabulary.hasChild, GetterArity.Singular, TermWrapper.as(ChildDecorated))
+    @getter(Example.hasChild, GetterArity.Singular, TermWrapper.as(ChildDecorated))
     public get hasChild(): ChildDecorated {
         throw new Error
     }
 
-    @setter(Vocabulary.hasChild, SetterArity.Overwrite, TermWrapper.as(ChildDecorated))
+    @setter(Example.hasChild, SetterArity.Overwrite, TermWrapper.as(ChildDecorated))
     public set hasChild(_: ChildDecorated) {
         throw new Error
     }
 
-    @getter(Vocabulary.hasChildSet, GetterArity.Objects, TermWrapper.as(ChildDecorated))
+    @getter(Example.hasChildSet, GetterArity.Objects, TermWrapper.as(ChildDecorated))
     public get hasChildSet(): Set<ChildDecorated> {
         throw new Error
     }
