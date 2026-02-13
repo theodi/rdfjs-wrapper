@@ -14,9 +14,20 @@ export class TermWrapper {
     protected singular<T>(p: string, valueMapping: ValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
 
+        let object: Term | undefined
+
+        for (const q of this.dataset.match(this.term, predicate)) {
+            object = q.object
+            break
+        }
+
+        if (object === undefined) {
+            throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
+        }
+
         return valueMapping(
             new TermWrapper(
-                [...this.dataset.match(this.term, predicate)][0]!.object,
+                object,
                 this.dataset,
                 this.factory
             )

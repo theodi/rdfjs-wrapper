@@ -10,6 +10,8 @@ export function getter(predicate: string, getterArity: GetterArity, valueMapping
             switch (getterArity) {
                 case GetterArity.Singular:
                     return this.singular(predicate, valueMapping)
+                case GetterArity.SingularNullable:
+                    return this.singularNullable(predicate, valueMapping)
                 case GetterArity.Objects:
                     return this.objects(predicate, valueMapping, termMapping)
             }
