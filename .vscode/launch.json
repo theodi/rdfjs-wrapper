@@ -9,8 +9,7 @@
             "runtimeArgs": [
                 "run-script",
                 "start"
-            ],
-            "preLaunchTask": "npm: build"
+            ]
         }
     ]
 }
