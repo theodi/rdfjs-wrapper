@@ -12,6 +12,7 @@ prefix : <https://example.org/>
 <x>
     :hasString "o1" ;
     :hasDate "1969-01-01" ;
+    :hasIri <https://example.org> ;
     :hasChild [
         :hasName "child name 1" ;
     ] ;
@@ -40,6 +41,10 @@ describe("Term Wrappers", async () => {
             assert.equal(parent.hasDate.toISOString(), "1969-01-01T00:00:00.000Z")
         })
 
+        it("get single iri to string", () => {
+            assert.equal(parent.hasIri, "https://example.org")
+        })
+
         it("get single wrapped term", () => {
             assert.equal("child name 1", parent.hasChild.hasName)
         })
@@ -64,6 +69,11 @@ describe("Term Wrappers", async () => {
         it("set single date to date", () => {
             parent.hasDate = new Date("1970-01-01")
             assert.equal(parent.hasDate.toISOString(), "1970-01-01T00:00:00.000Z")
+        })
+
+        it("get single string to iri", () => {
+            parent.hasIri = "x"
+            assert.equal(parent.hasIri, "x")
         })
 
         it("set single wrapped term", () => {
