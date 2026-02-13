@@ -3,7 +3,7 @@ export type * from "./type/TermWrapperConstructor.js"
 export type * from "./type/ValueMapping.js"
 
 export * from "./decorators/GetterArity.js"
-export * from "./decorators/SetterArity.js"
+export * from "./decorators/SetterArity_.js"
 export * from "./decorators/getter.js"
 export * from "./decorators/setter.js"
 export * from "./mapping/TermMappings.js"
