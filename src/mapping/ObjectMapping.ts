@@ -1,5 +1,5 @@
-import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 import type { IValueMapping } from "../type/IValueMapping.js"
+import type { ITermWrapperConstructor } from "../type/ITermWrapperConstructor.js"
 import type { TermWrapper } from "../TermWrapper.js"
 
 
@@ -15,7 +15,7 @@ import type { TermWrapper } from "../TermWrapper.js"
  *
 */
 export namespace ObjectMapping {
-    export function as<T>(constructor: new (term: Term, dataset: DatasetCore, factory: DataFactory) => T): IValueMapping<T> {
+    export function as<T>(constructor: ITermWrapperConstructor<T>): IValueMapping<T> {
         return (termWrapper: TermWrapper) => new constructor(termWrapper.term, termWrapper.dataset, termWrapper.factory)
     }
 }
