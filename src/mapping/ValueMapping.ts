@@ -10,6 +10,8 @@ export namespace ValueMapping {
         return termWrapper.term.value
     }
 
+    // TODO: Literal to Lang string
+
     export function literalToDate(termWrapper: TermWrapper): Date {
         return new Date(termWrapper.term.value)
     }
@@ -21,4 +23,6 @@ export namespace ValueMapping {
     export function iriToString(termWrapper: TermWrapper): string {
         return termWrapper.term.value
     }
+
+    // TODO: blank node to string
 }

@@ -7,23 +7,23 @@ export class TermWrapper {
     public constructor(public readonly term: Term, public readonly dataset: DatasetCore, public readonly factory: DataFactory) {
     }
 
-    protected singular<T>(p: string, valueMapping: IValueMapping<T>): T {
+    protected getSingular<T>(p: string, valueMapping: IValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
-        const match = this.dataset.match(this.term, predicate)
+        const matches = this.dataset.match(this.term, predicate)
 
         // TODO: Expose standard errors
-        if (match.size > 1) {
+        if (matches.size > 1) {
             throw new Error(`More than one value for predicate ${p} on term ${this.term.value}`)
         }
 
-        for (const q of this.dataset.match(this.term, predicate)) {
+        for (const q of matches) {
             return valueMapping(new TermWrapper(q.object, this.dataset, this.factory))
         }
 
         throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
     }
 
-    protected singularNullable<T>(p: string, valueMapping: IValueMapping<T>): T | undefined {
+    protected getSingularNullable<T>(p: string, valueMapping: IValueMapping<T>): T | undefined {
         const predicate = this.factory.namedNode(p)
 
         for (const q of this.dataset.match(this.term, predicate)) {
@@ -33,11 +33,15 @@ export class TermWrapper {
         return
     }
 
-    protected objects<T>(p: string, valueMapping: IValueMapping<T>, termMapping: ITermMapping<T>): Set<T> {
-        return new WrappingSet(this, p, valueMapping, termMapping)
+    protected setSingular<T>(p: string, value: T, nodeMapping: ITermMapping<T>): void {
+        if (value === undefined) {
+            throw new Error("value cannot be undefined")
+        }
+
+        this.setSingularNullable(p, value, nodeMapping)
     }
 
-    protected overwriteNullable<T>(p: string, value: T | undefined, termMapping: ITermMapping<T>): void {
+    protected setSingularNullable<T>(p: string, value: T | undefined, termMapping: ITermMapping<T>): void {
         const predicate = this.factory.namedNode(p)
 
         for (const q of this.dataset.match(this.term, predicate)) {
@@ -70,12 +74,8 @@ export class TermWrapper {
         this.dataset.add(q)
     }
 
-    protected overwrite<T>(p: string, value: T, nodeMapping: ITermMapping<T>): void {
-        if (value === undefined) {
-            throw new Error("value cannot be undefined")
-        }
-
-        this.overwriteNullable(p, value, nodeMapping)
+    protected getSet<T>(p: string, valueMapping: IValueMapping<T>, termMapping: ITermMapping<T>): Set<T> {
+        return new WrappingSet(this, p, valueMapping, termMapping)
     }
 
     private static isQuadSubject(term: Term): term is Quad_Subject {

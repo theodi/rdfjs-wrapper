@@ -1,4 +1,5 @@
 export enum GetterArity {
     Singular,
-    Objects
+    SingularNullable,
+    Set
 }

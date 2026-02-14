@@ -8,11 +8,11 @@ export function setter(predicate: string, setterArity: SetterArity, termMapping:
     return function (target: any, context: ClassSetterDecoratorContext): any {
         return function (this: TermWrapper, value: any): void {
             switch (setterArity) {
-                case SetterArity.Overwrite:
-                    this.overwrite(predicate, value, termMapping)
+                case SetterArity.Singular:
+                    this.setSingular(predicate, value, termMapping)
                     break
-                case SetterArity.OverwriteNullable:
-                    this.overwriteNullable(predicate, value, termMapping)
+                case SetterArity.SingularNullable:
+                    this.setSingularNullable(predicate, value, termMapping)
                     break
             }
         }

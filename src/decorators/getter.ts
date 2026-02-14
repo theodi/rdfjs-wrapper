@@ -11,9 +11,11 @@ export function getter(predicate: string, getterArity: GetterArity, valueMapping
         return function (this: TermWrapper): any {
             switch (getterArity) {
                 case GetterArity.Singular:
-                    return this.singular(predicate, valueMapping)
-                case GetterArity.Objects:
-                    return this.objects(predicate, valueMapping, termMapping)
+                    return this.getSingular(predicate, valueMapping)
+                case GetterArity.SingularNullable:
+                    return this.getSingularNullable(predicate, valueMapping)
+                case GetterArity.Set:
+                    return this.getSet(predicate, valueMapping, termMapping)
             }
         }
     }

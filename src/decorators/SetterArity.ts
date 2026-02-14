@@ -1,4 +1,4 @@
 export enum SetterArity {
-    Overwrite,
-    OverwriteNullable
+    Singular,
+    SingularNullable
 }
