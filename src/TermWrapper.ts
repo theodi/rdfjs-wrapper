@@ -4,7 +4,21 @@ import type { IValueMapping } from "./type/IValueMapping.js"
 
 
 export class TermWrapper {
-    public constructor(public readonly term: Term, public readonly dataset: DatasetCore, public readonly factory: DataFactory) {
+    public readonly term: Term;
+    public readonly dataset: DatasetCore;
+    public readonly factory: DataFactory;
+
+    public constructor(term: string, dataset: DatasetCore, factory: DataFactory);
+    public constructor(term: Term, dataset: DatasetCore, factory: DataFactory);
+    public constructor(term: string | Term, dataset: DatasetCore, factory: DataFactory) {
+        if (typeof term === "string") {
+            this.term = factory.namedNode(term);
+        }
+        else {
+            this.term = term;
+        }
+        this.dataset = dataset;
+        this.factory = factory;
     }
 
     protected getSingular<T>(p: string, valueMapping: IValueMapping<T>): T {

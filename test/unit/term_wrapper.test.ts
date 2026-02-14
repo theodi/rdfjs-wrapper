@@ -31,7 +31,7 @@ prefix : <https://example.org/>
 
 describe("Term Wrapper", async () => {
     const dataset = datasetFromRdf(rdf)
-    const parent = new Parent(DataFactory.namedNode("x"), dataset, DataFactory)
+    const parent = new Parent("x", dataset, DataFactory)
     const newChild = new Child(DataFactory.blankNode(), dataset, DataFactory)
     newChild.hasName = "child name 4"
 

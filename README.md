@@ -69,7 +69,7 @@ ex:person1 ex:name "Alice" .
 Class usage:
 
 ```javascript
-const person1 = new Person(DataFactory.namedNode("https://example.org/person1"), dataset_x, DataFactory)
+const person1 = new Person("https://example.org/person1", dataset_x, DataFactory)
 
 // Get property
 console.log(person1.name)
