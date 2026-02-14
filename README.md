@@ -23,12 +23,12 @@ Practically, to map RDF to objects, you need to:
 1. Write a class or use an existing class that extends TermWrapper
 1. Each class needs a Term, a Dataset, and a DataFactory to be instantiated
 1. Each class property will have an associated RDF Property (a string, generally a URL, that is defined by an ontology/vocabulary)
+1. Each class property will have an associated arrity (singular, singular nullable or set)
 1. Each class property depending on its type can have:
     1. a corresponding ValueMapping to get values, that is translating RDF Terms to JavaScript [primitive values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures#primitive_values) (string, number, boolean...)
     1. a corresponding TermMapping to set values, that is translating Javascript primitive values to RDF Terms
-    1. a corresponding ValueMapping and TermMapping for sets of primitive values
-    1. a corresponding TermWrapper for properties returning a class
-    1. two corresponding TermWrappers (generally the same) for sets of classes
+    1. a corresponding ObjectMapping to wrap child objects as a TermWrapper
+    1. a corresponding ValueMapping and TermMapping for sets of primitive values (both can be an ObjectMapping)
 1. Each class mutates the underlying Dataset that is passed to it at instantiation time
 
 
@@ -46,15 +46,16 @@ A [term](https://www.w3.org/TR/rdf12-concepts/#section-terms) wrapper instantiat
 For example you can write a `Person` class with one `name` property:
 
 ```javascript
-import { TermWrapper } from "https://unpkg.com/rdfjs-wrapper"
+import { TermWrapper, ValueMapping, TermMapping } from "https://unpkg.com/rdfjs-wrapper"
 
 class Person extends TermWrapper {
 	get name() {
-		return this.getSingularNullable("https://example.org/name", ValueMappings.literalToString)
+		return this.getSingularNullable("https://example.org/name", ValueMapping.literalToString)
 	}
 
 	set name(value) {
-		this.setSingularNullable("https://example.org/name", value, TermMappings.literalToString)
+		this.setSingularNullable("https://example.org/name", value, TermMapping.literalToString)
+	}
 }
 ```
 
@@ -116,6 +117,69 @@ for (const person of people) {
 // outputs
 // Alice
 // Bob
+```
+
+
+### Wrapping objects
+
+For example you can write a `Person` class with one `name` and one `mum` property:
+
+```javascript
+import { TermWrapper, ValueMapping, TermMapping, ObjectMapping } from "https://unpkg.com/rdfjs-wrapper"
+
+class Person extends TermWrapper {
+	get name() {
+		return this.getSingularNullable("https://example.org/name", ValueMapping.literalToString)
+	}
+
+	set name(value) {
+		this.getSingularNullable("https://example.org/name", value, TermMapping.literalToString)
+	}
+
+	get mum() {
+		return this.getSingularNullable("https://example.org/mum", ObjectMapping.as(Person))
+	}
+
+	set mum(value) {
+		this.setSingularNullable("https://example.org/mum", value, ObjectMapping.as(Person))
+	}
+}
+```
+
+Assuming the following RDF has been loaded in a dataset `dataset_z`:
+
+```turtle
+PREFIX ex: <https://example.org/>
+
+ex:person1 ex:name "Alice" .
+
+ex:person2
+	ex:name "Bob" ;
+	ex:mum ex:person2 ;
+.
+```
+
+Class usage:
+
+```javascript
+const person2 = new Person("https://example.org/person2", dataset_z, DataFactory)
+
+// Get property
+console.log(person2.name)
+// outputs "Bob"
+
+// Get property from child class
+console.log(person2.mum.name)
+// outputs "Alice"
+
+// Set class properties
+const person3 = new Person("https://example.org/person3", dataset_z, DataFactory)
+person3.name = "Joanne"
+person1.mum = person3
+console.log(person1.mum.name)
+// outputs "Joanne"
+console.log(person2.mum.mum.name)
+// outputs "Joanne"
 ```
 
 
