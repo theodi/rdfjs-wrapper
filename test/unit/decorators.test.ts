@@ -10,14 +10,14 @@ const rdf = `
 prefix : <https://example.org/>
 
 <x>
-    :hasString "o1" ;
+    :hasString "string 1" ;
     :hasChild [
-        :hasName "child name 1" ;
+        :hasString "child string 1" ;
     ] ;
     :hasChildSet [
-        :hasName "child name 2" ;
+        :hasString "child string 2" ;
     ], [
-        :hasName "child name 3" ;
+        :hasString "child string 3" ;
     ] .
 `;
 
@@ -25,20 +25,19 @@ describe("Decorators", async () => {
     const dataset = datasetFromRdf(rdf)
     const parentDecorated = new ParentDecorated(DataFactory.namedNode("x"), dataset, DataFactory)
     const newChild = new ChildDecorated(DataFactory.blankNode(), dataset, DataFactory)
-    newChild.hasName = "new name"
 
     describe("Term Mappings", async () => {
         it("get single literal to string", () => {
-            assert.equal("o1", parentDecorated.hasString)
+            assert.equal(parentDecorated.hasString, "string 1")
         })
 
         it("get single wrapped term", () => {
-            assert.equal("child name 1", parentDecorated.hasChild.hasName)
+            assert.equal(parentDecorated.hasChild.hasString, "child string 1")
         })
 
         it("get set of wrapped terms' single literal to string", () => {
             for (const child of parentDecorated.hasChildSet) {
-                assert.equal(true, ["child name 2", "child name 3"].includes(child.hasName!))
+                assert.equal(["child string 2", "child string 3"].includes(child.hasString!), true)
             }
         })
     })
@@ -46,12 +45,13 @@ describe("Decorators", async () => {
     describe("Value Mappings", async () => {
         it("set single literal to string", () => {
             parentDecorated.hasString = "xxxxx"
-            assert.equal("xxxxx", parentDecorated.hasString)
+            assert.equal(parentDecorated.hasString, "xxxxx")
         })
 
         it("set single wrapped term", () => {
+            newChild.hasString = "new string"
             parentDecorated.hasChild = newChild
-            assert.equal("new name", parentDecorated.hasChild.hasName)
+            assert.equal(parentDecorated.hasChild.hasString, "new string" )
         })
     })
 })

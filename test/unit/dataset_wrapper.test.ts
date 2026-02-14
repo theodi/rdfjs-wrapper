@@ -12,12 +12,12 @@ prefix : <https://example.org/>
     a :Parent ;
     :hasString "o1" ;
     :hasChild [
-        :hasName "child name 1" ;
+        :hasString "child string 1" ;
     ] ;
     :hasChildSet [
-        :hasName "child name 2" ;
+        :hasString "child string 2" ;
     ], [
-        :hasName "child name 3" ;
+        :hasString "child string 3" ;
     ] ;
 .
 <y>
@@ -25,7 +25,7 @@ prefix : <https://example.org/>
     :hasChild <z> ;
 .
 <z>
-    :hasName "child name 4" ;
+    :hasString "child string 4" ;
 .
 `;
 
@@ -53,7 +53,7 @@ describe("Dataset Wrappers", async () => {
         assert.equal((Array.from(parentDataset.objectsOfHasChild).length), 2)
 
         for (const child of parentDataset.objectsOfHasChild) {
-            assert.equal(["child name 1", "child name 4"].includes(child.hasName!), true)
+            assert.equal(["child string 1", "child string 4"].includes(child.hasString!), true)
         }
     })
 
@@ -69,7 +69,7 @@ describe("Dataset Wrappers", async () => {
         assert.equal((Array.from(parentDataset.matchObjectsOfSubjectxPropertyhaschildGraphany).length), 1)
 
         for (const child of parentDataset.matchObjectsOfSubjectxPropertyhaschildGraphany) {
-            assert.equal("child name 1", child.hasName)
+            assert.equal("child string 1", child.hasString)
         }
     })
 

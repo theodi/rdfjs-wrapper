@@ -10,19 +10,22 @@ const rdf = `
 prefix : <https://example.org/>
 
 <x>
-    :hasString "o1" ;
+    :hasBlankNode _:0 ;
+    :hasDate "1969-01-01" ;
+    :hasLangString "lang string 1"@en ;
+    :hasNumber "1" ;
+    :hasString "string 1" ;
+    :hasIri <https://example.org> ;
     :hasTooManySingularString "o3", "o4" ;
     :hasNullableString "o2" ;
-    :hasDate "1969-01-01" ;
-    :hasNumber "1" ;
-    :hasIri <https://example.org> ;
     :hasChild [
-        :hasName "child name 1" ;
+        :hasString "child string 1" ;
     ] ;
+    :hasLangStringSet "lang string 1", "lang string 2"@en, "lang string 3"@fr ;
     :hasChildSet [
-        :hasName "child name 2" ;
+        :hasString "child string 2" ;
     ], [
-        :hasName "child name 3" ;
+        :hasString "child string 3" ;
     ] ;
     :hasRecursive <x> ;
 .
@@ -32,38 +35,45 @@ prefix : <https://example.org/>
 describe("Term Wrapper", async () => {
     const dataset = datasetFromRdf(rdf)
     const parent = new Parent("x", dataset, DataFactory)
-    const newChild = new Child(DataFactory.blankNode(), dataset, DataFactory)
-    newChild.hasName = "child name 4"
 
 
-    describe("Term Mapping", async () => {
-        it("get single literal to string", () => {
-            assert.equal(parent.hasString, "o1")
+    describe("Value Mapping", async () => {
+        it("get blank node to string", () => {
+            assert.equal(parent.hasBlankNode, "b0_0")
         })
 
-        it("get single date to date", () => {
+        it("get literal to date", () => {
             assert.equal(parent.hasDate.toISOString(), "1969-01-01T00:00:00.000Z")
         })
 
-        it("get single iri to string", () => {
-            assert.equal(parent.hasIri, "https://example.org")
+        it("get literal to lang string", () => {
+            assert.deepEqual(parent.hasLangString, { lang: "en", string: "lang string 1"})
         })
 
-        it("get single number to number", () => {
+        it("get literal to number", () => {
             assert.equal(parent.hasNumber, 1)
+        })
+
+        it("get literal to string", () => {
+            assert.equal(parent.hasString, "string 1")
+        })
+
+        it("get iri to string", () => {
+            assert.equal(parent.hasIri, "https://example.org")
         })
     })
 
 
-    describe("Value Mapping", async () => {
-        it("set string to literal", () => {
-            parent.hasString = "o1 edited"
-            assert.equal(parent.hasString, "o1 edited")
-        })
-
+    describe("Term Mapping", async () => {
         it("set date to literal", () => {
             parent.hasDate = new Date("1970-01-01")
             assert.equal(parent.hasDate.toISOString(), "1970-01-01T00:00:00.000Z")
+        })
+
+        it("set lang string to literal", () => {
+            const langString = { lang: "fr", string: "lang string 2" }
+            parent.hasLangString = langString
+            assert.deepEqual(parent.hasLangString, langString)
         })
 
         it("set number to literal", () => {
@@ -71,38 +81,52 @@ describe("Term Wrapper", async () => {
             assert.equal(parent.hasNumber, 2)
         })
 
+        it("set string to blank node", () => {
+            // TODO: Check if this is expected behaviour
+            // Does this clash with named node x when matching?
+            parent.hasBlankNode = "x"
+            assert.equal(parent.hasBlankNode, "x")
+        })
+
         it("set string to iri", () => {
             parent.hasIri = "x"
             assert.equal(parent.hasIri, "x")
+        })
+
+        it("set string to literal", () => {
+            parent.hasString = "o1 edited"
+            assert.equal(parent.hasString, "o1 edited")
         })
     })
 
 
     describe("Object Mapping", async () => {
         it("get wrapped term", () => {
-            assert.equal(parent.hasChild.hasName, "child name 1")
+            assert.equal(parent.hasChild.hasString, "child string 1")
         })
 
         it("set wrapped term", () => {
+            const newChild = new Child(DataFactory.blankNode(), dataset, DataFactory)
+            newChild.hasString = "child string 4"
             parent.hasChild = newChild
-            assert.equal(parent.hasChild.hasName, "child name 4")
+            assert.equal(parent.hasChild.hasString, "child string 4")
         })
     })
 
 
-    describe("Arrity Mapping", async () => {
+    describe("Arity Mapping", async () => {
         describe("Singular", async () => {
-            it("get singular arrity throws if more than 1", () => {
+            it("get singular throws if more than 1", () => {
                 // TODO: Test for specific errors
                 assert.throws(() => parent.hasTooManySingularString)
             })
 
-            it("get singular arrity throws if no value", () => {
+            it("get singular throws if no value", () => {
                 // TODO: Test for specific errors
                 assert.throws(() => parent.hasNoSingularString)
             })
 
-            it("set singular arrity to undefined throws", () => {
+            it("set singular to undefined throws", () => {
                 assert.throws(() => { parent.hasString = undefined as any })
             })
         })
@@ -114,10 +138,10 @@ describe("Term Wrapper", async () => {
             })
 
             it("set nullable to undefined", () => {
-                assert.equal(parent.dataset.size, 15)
+                assert.equal(parent.dataset.size, 20)
                 parent.hasNullableString = undefined
                 assert.equal(parent.hasNullableString, undefined)
-                assert.equal(parent.dataset.size, 14)
+                assert.equal(parent.dataset.size, 19)
             })
 
             it("set nullable to string", () => {
@@ -128,25 +152,34 @@ describe("Term Wrapper", async () => {
             // TODO: Test nullable object
         })
 
-        // TODO: Set Arrity
+        // TODO: Set Arity
     })
 
 
     describe("Set Mapping", async () => {
         // TODO: test primitive types wrapping set
 
+        it("get set of lang string", () => {
+            assert.equal(parent.hasLangStringSet.size, 3)
+            for (const langString of parent.hasLangStringSet) {
+                assert.equal(["", "en", "fr"].includes(langString.lang), true)
+            }
+        })
+
         it("get set of wrapped terms", () => {
-            assert.equal(2, parent.hasChildSet.size)
+            assert.equal(parent.hasChildSet.size, 2)
         })
 
         it("add to set of wrapped terms", () => {
+            const newChild = new Child(DataFactory.blankNode(), dataset, DataFactory)
+            newChild.hasString = "child string 5"
             parent.hasChildSet.add(newChild)
-            assert.equal(3, parent.hasChildSet.size)
+            assert.equal(parent.hasChildSet.size, 3)
         })
 
         it("get set of wrapped terms' single literal to string", () => {
             for (const child of parent.hasChildSet) {
-                assert.equal(true, ["child name 2", "child name 3", "child name 4"].includes(child.hasName!))
+                assert.equal(["child string 2", "child string 3", "child string 5"].includes(child.hasString!), true)
             }
         })
     })
@@ -158,13 +191,13 @@ describe("Term Wrapper", async () => {
         })
 
         it("set recursive property", () => {
-            assert.equal(parent.dataset.size, 16)
+            assert.equal(parent.dataset.size, 22)
             parent.hasRecursive = undefined
-            assert.equal(parent.dataset.size, 15)
+            assert.equal(parent.dataset.size, 21)
             // TODO: check for typed error singular no value
             assert.throws(() => parent.hasRecursive)
             parent.hasRecursive = "x"
-            assert.equal("x", parent.hasRecursive.hasRecursive.hasRecursive.term.value)
+            assert.equal(parent.hasRecursive.hasRecursive.hasRecursive.term.value, "x")
         })
 
         // TODO: test recursion in wrapping set

@@ -23,7 +23,7 @@ Practically, to map RDF to objects, you need to:
 1. Write a class or use an existing class that extends TermWrapper
 1. Each class needs a Term, a Dataset, and a DataFactory to be instantiated
 1. Each class property will have an associated RDF Property (a string, generally a URL, that is defined by an ontology/vocabulary)
-1. Each class property will have an associated arrity (singular, singular nullable or set)
+1. Each class property will have an associated arity (singular, singular nullable or set)
 1. Each class property depending on its type can have:
     1. a corresponding ValueMapping to get values, that is translating RDF Terms to JavaScript [primitive values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures#primitive_values) (string, number, boolean...)
     1. a corresponding TermMapping to set values, that is translating Javascript primitive values to RDF Terms

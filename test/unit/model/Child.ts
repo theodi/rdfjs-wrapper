@@ -2,11 +2,11 @@ import { TermMapping, TermWrapper, ValueMapping } from "rdfjs-wrapper"
 import { Example } from "../vocabulary/Example.js"
 
 export class Child extends TermWrapper {
-    public get hasName(): string | undefined {
-        return this.getSingularNullable(Example.hasName, ValueMapping.literalToString)
+    public get hasString(): string | undefined {
+        return this.getSingularNullable(Example.hasString, ValueMapping.literalToString)
     }
 
-    public set hasName(value: string | undefined) {
-        this.setSingularNullable(Example.hasName, value, TermMapping.stringToLiteral)
+    public set hasString(value: string | undefined) {
+        this.setSingularNullable(Example.hasString, value, TermMapping.stringToLiteral)
     }
 }

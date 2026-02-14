@@ -12,12 +12,12 @@ prefix : <https://example.org/>
     a :Parent ;
     :hasString "o1" ;
     :hasChild [
-        :hasName "child name 1" ;
+        :hasString "child string 1" ;
     ] ;
     :hasChildSet [
-        :hasName "1" ;
+        :hasString "1" ;
     ], [
-        :hasName "2" ;
+        :hasString "2" ;
     ] ;
 .
 `;

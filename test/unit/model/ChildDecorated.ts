@@ -2,12 +2,12 @@ import { getter, GetterArity, setter, SetterArity, TermMapping, TermWrapper, Val
 import { Example } from "../vocabulary/Example.js"
 
 export class ChildDecorated extends TermWrapper {
-    @getter(Example.hasName, GetterArity.SingularNullable, ValueMapping.literalToString)
-    public get hasName(): string | undefined {
+    @getter(Example.hasString, GetterArity.SingularNullable, ValueMapping.literalToString)
+    public get hasString(): string | undefined {
         throw new Error
     }
 
-    @setter(Example.hasName, SetterArity.SingularNullable, TermMapping.stringToLiteral)
-    public set hasName(_: string | undefined) {
+    @setter(Example.hasString, SetterArity.SingularNullable, TermMapping.stringToLiteral)
+    public set hasString(_: string | undefined) {
     }
 }
