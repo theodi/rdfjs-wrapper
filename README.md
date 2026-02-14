@@ -50,11 +50,11 @@ import { TermWrapper } from "https://unpkg.com/rdfjs-wrapper"
 
 class Person extends TermWrapper {
 	get name() {
-		return this.singularNullable("https://example.org/name", ValueMappings.literalToString)
+		return this.getSingularNullable("https://example.org/name", ValueMappings.literalToString)
 	}
 
 	set name(value) {
-		this.overwriteNullable("https://example.org/name", value, TermMappings.literalToString)
+		this.setSingularNullable("https://example.org/name", value, TermMappings.literalToString)
 }
 ```
 
