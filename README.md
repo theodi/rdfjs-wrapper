@@ -50,11 +50,11 @@ import { TermWrapper, ValueMapping, TermMapping } from "https://unpkg.com/rdfjs-
 
 class Person extends TermWrapper {
 	get name() {
-		return this.getSingularNullable("https://example.org/name", ValueMapping.literalToString)
+		return this.singularNullable("https://example.org/name", ValueMapping.literalToString)
 	}
 
 	set name(value) {
-		this.setSingularNullable("https://example.org/name", value, TermMapping.literalToString)
+		this.overwriteNullable("https://example.org/name", value, TermMapping.literalToString)
 	}
 }
 ```
@@ -129,19 +129,19 @@ import { TermWrapper, ValueMapping, TermMapping, ObjectMapping } from "https://u
 
 class Person extends TermWrapper {
 	get name() {
-		return this.getSingularNullable("https://example.org/name", ValueMapping.literalToString)
+		return this.singularNullable("https://example.org/name", ValueMapping.literalToString)
 	}
 
 	set name(value) {
-		this.getSingularNullable("https://example.org/name", value, TermMapping.literalToString)
+		this.singularNullable("https://example.org/name", value, TermMapping.literalToString)
 	}
 
 	get mum() {
-		return this.getSingularNullable("https://example.org/mum", ObjectMapping.as(Person))
+		return this.singularNullable("https://example.org/mum", ObjectMapping.as(Person))
 	}
 
 	set mum(value) {
-		this.setSingularNullable("https://example.org/mum", value, ObjectMapping.as(Person))
+		this.overwriteNullable("https://example.org/mum", value, ObjectMapping.as(Person))
 	}
 }
 ```

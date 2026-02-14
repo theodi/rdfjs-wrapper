@@ -3,10 +3,10 @@ import { Example } from "../vocabulary/Example.js"
 
 export class Child extends TermWrapper {
     public get hasString(): string | undefined {
-        return this.getSingularNullable(Example.hasString, ValueMapping.literalToString)
+        return this.singularNullable(Example.hasString, ValueMapping.literalToString)
     }
 
     public set hasString(value: string | undefined) {
-        this.setSingularNullable(Example.hasString, value, TermMapping.stringToLiteral)
+        this.overwriteNullable(Example.hasString, value, TermMapping.stringToLiteral)
     }
 }

@@ -9,10 +9,10 @@ export function setter(predicate: string, setterArity: SetterArity, termMapping:
         return function (this: TermWrapper, value: any): void {
             switch (setterArity) {
                 case SetterArity.Singular:
-                    this.setSingular(predicate, value, termMapping)
+                    this.overwrite(predicate, value, termMapping)
                     break
                 case SetterArity.SingularNullable:
-                    this.setSingularNullable(predicate, value, termMapping)
+                    this.overwriteNullable(predicate, value, termMapping)
                     break
             }
         }
