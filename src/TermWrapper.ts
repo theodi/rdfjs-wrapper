@@ -13,8 +13,7 @@ export class TermWrapper {
     public constructor(term: string | Term, dataset: DatasetCore, factory: DataFactory) {
         if (typeof term === "string") {
             this.term = factory.namedNode(term);
-        }
-        else {
+        } else {
             this.term = term;
         }
         this.dataset = dataset;
