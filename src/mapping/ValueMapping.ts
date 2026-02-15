@@ -1,4 +1,4 @@
-import type { Literal } from "@rdfjs/types"
+import type { Literal, Term } from "@rdfjs/types"
 import type { ILangString } from "../type/ILangString.js"
 import type { TermWrapper } from "../TermWrapper.js"
 
@@ -45,5 +45,9 @@ export namespace ValueMapping {
 
     export function iriOrBlankNodeToString(termWrapper: TermWrapper): string {
         return termWrapper.term.value
+    }
+
+    export function asIs(termWrapper: TermWrapper): Term {
+        return termWrapper.term
     }
 }

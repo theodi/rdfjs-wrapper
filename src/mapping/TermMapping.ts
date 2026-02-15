@@ -1,4 +1,4 @@
-import type { DataFactory, DatasetCore } from "@rdfjs/types"
+import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 import type { ILangString } from "../type/ILangString.js"
 
 import { TermWrapper } from "../TermWrapper.js"
@@ -36,5 +36,9 @@ export namespace TermMapping {
 
     export function stringToLiteral(value: string, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
         return new TermWrapper(factory.literal(value), dataset, factory)
+    }
+
+    export function asIs(value: Term, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
+        return new TermWrapper(value, dataset, factory)
     }
 }
