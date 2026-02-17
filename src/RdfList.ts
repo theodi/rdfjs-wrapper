@@ -30,7 +30,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     at(index: number): T | undefined {
-        return [...this].at(index)
+        // TODO: Don't materialize all, only up to index
         return [...this.items].at(index)?.first
     }
 
@@ -43,6 +43,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     entries(): ArrayIterator<[number, T]> {
+        // TODO: Don't materlialize all upfront
         return [...this].entries()
     }
 
@@ -91,7 +92,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     keys(): ArrayIterator<number> {
-        return [...this.listItems()].keys()
+        // TODO: Don't materialize all upfront
         return [...this.items].keys()
     }
 
@@ -132,6 +133,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     slice(start?: number, end?: number): T[] {
+        // TODO: Probably no need to materialize all
         return [...this].slice(start, end)
     }
 
