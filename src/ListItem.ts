@@ -66,4 +66,16 @@ export class ListItem<T> extends TermWrapper {
 
         return items.length
     }
+
+    public* items(): Iterable<ListItem<T>> {
+        if (!this.isListItem) {
+            return
+        }
+
+        yield this
+
+        for (const more of this.rest.items()) {
+            yield more
+        }
+    }
 }

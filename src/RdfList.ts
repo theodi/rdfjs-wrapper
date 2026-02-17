@@ -18,7 +18,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     get length(): number {
-        return [...this.listItems()].length
+        return [...this.items].length
     }
 
     set length(_: number) {
@@ -31,6 +31,7 @@ export class RdfList<T> implements Array<T> {
 
     at(index: number): T | undefined {
         return [...this].at(index)
+        return [...this.items].at(index)?.first
     }
 
     concat(...items: Array<ConcatArray<T> | T>): T[] {
@@ -91,6 +92,7 @@ export class RdfList<T> implements Array<T> {
 
     keys(): ArrayIterator<number> {
         return [...this.listItems()].keys()
+        return [...this.items].keys()
     }
 
     lastIndexOf(searchElement: T, fromIndex?: number): number {
@@ -102,7 +104,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     pop(): T | undefined {
-        return [...this.listItems()].at(-1)?.pop()
+        return [...this.items].at(-1)?.pop()
     }
 
     push(...items: T[]): number {
@@ -110,7 +112,7 @@ export class RdfList<T> implements Array<T> {
             throw new Error("Adding to empty is not implemented yet")
         }
 
-        return [...this.listItems()].at(-1)!.push(...items)
+        return [...this.items].at(-1)!.push(...items)
     }
 
     reduce<U>(callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue?: U): U {
@@ -150,17 +152,12 @@ export class RdfList<T> implements Array<T> {
     }
 
     * values(): ArrayIterator<T> {
-        for (const item of this.listItems()) {
+        for (const item of this.items) {
             yield item.first
         }
     }
 
-    private* listItems(): Iterable<ListItem<T>> {
-        let item = new ListItem(this.anchor, this.valueMapping, this.termMapping)
-        while (item.isListItem) {
-            yield item
-
-            item = item.rest
-        }
+    private get items(): Iterable<ListItem<T>> {
+        return new ListItem(this.anchor, this.valueMapping, this.termMapping).items()
     }
 }
