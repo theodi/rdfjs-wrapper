@@ -129,7 +129,11 @@ export class RdfList<T> implements Array<T> {
     }
 
     shift(): T | undefined {
-        throw new Error("not implemented")
+        for (const item of this.items) {
+            return item.shift()
+        }
+
+        return undefined
     }
 
     slice(start?: number, end?: number): T[] {

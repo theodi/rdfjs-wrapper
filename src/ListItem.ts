@@ -78,4 +78,23 @@ export class ListItem<T> extends TermWrapper {
             yield more
         }
     }
+
+    shift(): T | undefined {
+        const rest = this.rest
+        if (!rest.isListItem) {
+            throw new Error("?")
+        }
+
+        const shifted = this.first
+        const nextFirst = rest.firstRaw
+        const nextRest = rest.restRaw
+
+        rest.firstRaw = undefined
+        rest.restRaw = undefined
+
+        this.firstRaw = nextFirst
+        this.restRaw = nextRest
+
+        return shifted
+    }
 }
