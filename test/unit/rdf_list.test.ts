@@ -11,6 +11,98 @@ class Wrapper extends TermWrapper {
 }
 
 describe("RDF List", () => {
+    describe("not implemented", () => {
+        it("[Symbol.unscopables]", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                const _ = wrapper.list[Symbol.unscopables]
+            }, /^Error: not implemented$/)
+        })
+
+        it("concat", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.concat()
+            }, /^Error: not implemented$/)
+        })
+
+        it("copyWithin", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.copyWithin(undefined!, undefined!)
+            }, /^Error: not implemented$/)
+        })
+
+        it("fill", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.fill(undefined!)
+            }, /^Error: not implemented$/)
+        })
+
+        it("flat", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.flat()
+            }, /^Error: not implemented$/)
+        })
+
+        it("reduce", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.reduce(undefined!)
+            }, /^Error: not implemented$/)
+        })
+
+        it("reduceRight", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.reduceRight(undefined!)
+            }, /^Error: not implemented$/)
+        })
+
+        it("reverse", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.reverse()
+            }, /^Error: not implemented$/)
+        })
+
+        it("sort", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.sort()
+            }, /^Error: not implemented$/)
+        })
+
+        it("splice", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                wrapper.list.splice(undefined!)
+            }, /^Error: not implemented$/)
+        })
+    })
+
     describe("general", () => {
         it("not list", () => {
             const rdf = `<s> <p> <o> .`
