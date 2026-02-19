@@ -154,7 +154,14 @@ export class RdfList<T> implements Array<T> {
     }
 
     unshift(...items: T[]): number {
-        throw new Error("not implemented")
+        for (const itemToInsert of items.reverse()) {
+            for (const item of this.items) {
+                item.unshift(itemToInsert)
+                break
+            }
+        }
+
+        return this.length
     }
 
     * values(): ArrayIterator<T> {

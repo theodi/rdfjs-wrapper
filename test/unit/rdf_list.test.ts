@@ -202,4 +202,60 @@ describe("RDF List", () => {
             assert.deepStrictEqual([...wrapper.list], ["o2"])
         })
     })
+
+    describe("unshift", () => {
+        it("not list throws", {skip: "not implemented yet"}, () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => {
+                return wrapper.list.unshift("o1");
+            })
+        })
+
+        it("empty adds", {skip: "not implemented yet"}, () => {
+            const rdf = `<s> <p> () .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            const unshifted = wrapper.list.unshift("o1")
+
+            assert.strictEqual(unshifted, 1)
+        })
+
+        it("one adds one", () => {
+            const rdf = `<s> <p> ( "o1" ) .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            const unshifted = wrapper.list.unshift("o2")
+
+            assert.strictEqual(unshifted, 2)
+        })
+
+        it("two adds two", () => {
+            const rdf = `<s> <p> ( "o1" ) .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            const unshifted = wrapper.list.unshift("o2", "o3")
+
+            assert.strictEqual(unshifted, 3)
+        })
+
+        it("one grows", () => {
+            const rdf = `<s> <p> ( "o1" ) .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            wrapper.list.unshift("o2")
+
+            assert.deepStrictEqual([...wrapper.list], ["o2", "o1"])
+        })
+
+        it("two grows", () => {
+            const rdf = `<s> <p> ( "o1" ) .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            wrapper.list.unshift("o2", "o3")
+
+            assert.deepStrictEqual([...wrapper.list], ["o2", "o3", "o1"])
+        })
+    })
 })
