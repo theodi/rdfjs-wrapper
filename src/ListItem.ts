@@ -11,11 +11,11 @@ export class ListItem<T> extends TermWrapper {
         super(term, dataset, factory)
     }
 
-    private get firstRaw(): Term | undefined {
+    public get firstRaw(): Term | undefined {
         return this.singularNullable(RDF.first, ValueMapping.asIs)
     }
 
-    private set firstRaw(value: Term | undefined) {
+    public set firstRaw(value: Term | undefined) {
         this.overwriteNullable(RDF.first, value, TermMapping.asIs)
     }
 
@@ -70,25 +70,6 @@ export class ListItem<T> extends TermWrapper {
         for (const more of this.rest.items()) {
             yield more
         }
-    }
-
-    shift(): T | undefined {
-        const rest = this.rest
-        if (!rest.isListItem) {
-            throw new Error("?")
-        }
-
-        const shifted = this.first
-        const nextFirst = rest.firstRaw
-        const nextRest = rest.restRaw
-
-        rest.firstRaw = undefined
-        rest.restRaw = undefined
-
-        this.firstRaw = nextFirst
-        this.restRaw = nextRest
-
-        return shifted
     }
 
     unshift(value: T) {

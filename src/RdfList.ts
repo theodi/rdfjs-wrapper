@@ -125,7 +125,7 @@ export class RdfList<T> implements Array<T> {
             const lastNode = this.root.isNil ?
                 // The statement representing an empty list is replaced by a new one whose object is the new node
                 // The representation of the first item (root, currently rdf:nil, the empty list) is overwritten by the new node
-                this.root = new Overwriter<T>(this.subject, this.predicate).newListNode = newNode :
+                this.root = new Overwriter<T>(this.subject, this.predicate).listNode = newNode :
 
                 // replace rest of current last with new and return is because it's the new last
                 [...this.items].at(-1)!.rest = newNode;
@@ -150,11 +150,22 @@ export class RdfList<T> implements Array<T> {
     }
 
     shift(): T | undefined {
-        for (const item of this.items) {
-            return item.shift()
+        if (this.root.isNil) {
+            return undefined
         }
 
-        return undefined
+        const value = this.root.first
+
+        if (this.root.rest.isNil) {
+            new Overwriter<T>(this.subject, this.predicate).listNode = this.root.rest
+            this.root.firstRaw = undefined
+            this.root.restRaw = undefined
+        } else {
+            this.root.firstRaw = this.root.rest.firstRaw
+            this.root.restRaw = this.root.rest.restRaw
+        }
+
+        return value
     }
 
     slice(start?: number, end?: number): T[] {

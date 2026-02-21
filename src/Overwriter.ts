@@ -7,7 +7,7 @@ export class Overwriter<T> extends TermWrapper {
         super(subject.term, subject.dataset, subject.factory);
     }
 
-    set newListNode(object: ListItem<T>) {
+    set listNode(object: ListItem<T>) {
         this.overwrite(this.predicate, object, TermMapping.identity)
     }
 }
