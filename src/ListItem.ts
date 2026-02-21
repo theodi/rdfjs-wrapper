@@ -1,5 +1,5 @@
 import { TermWrapper } from "./TermWrapper.js"
-import type { Term } from "@rdfjs/types"
+import type { DataFactory, DatasetCore, Term } from "@rdfjs/types"
 import { ValueMapping } from "./mapping/ValueMapping.js"
 import { TermMapping } from "./mapping/TermMapping.js"
 import { RDF } from "./vocabulary/RDF.js"
@@ -7,8 +7,8 @@ import type { IValueMapping } from "./type/IValueMapping"
 import type { ITermMapping } from "./type/ITermMapping.js"
 
 export class ListItem<T> extends TermWrapper {
-    constructor(term: TermWrapper, private readonly valueMapping: IValueMapping<T>, private readonly termMapping: ITermMapping<T>) {
-        super(term.term, term.dataset, term.factory)
+    constructor(term: Term, dataset: DatasetCore, factory: DataFactory, private readonly valueMapping: IValueMapping<T>, private readonly termMapping: ITermMapping<T>) {
+        super(term, dataset, factory)
     }
 
     private get firstRaw(): Term | undefined {
@@ -19,16 +19,20 @@ export class ListItem<T> extends TermWrapper {
         this.overwriteNullable(RDF.first, value, TermMapping.asIs)
     }
 
-    private get restRaw(): Term | undefined {
+    public get restRaw(): Term | undefined {
         return this.singularNullable(RDF.rest, ValueMapping.asIs)
     }
 
-    private set restRaw(value: Term | undefined) {
+    public set restRaw(value: Term | undefined) {
         this.overwriteNullable(RDF.rest, value, TermMapping.asIs)
     }
 
     public get isListItem(): boolean {
         return this.firstRaw !== undefined && this.restRaw !== undefined
+    }
+
+    public get isNil(): boolean {
+        return this.term.equals(this.factory.namedNode(RDF.nil))
     }
 
     public get first(): T {
@@ -40,7 +44,11 @@ export class ListItem<T> extends TermWrapper {
     }
 
     public get rest(): ListItem<T> {
-        return this.singular(RDF.rest, w => new ListItem(w, this.valueMapping, this.termMapping))
+        return this.singular(RDF.rest, w => new ListItem(w.term, w.dataset, w.factory, this.valueMapping, this.termMapping))
+    }
+
+    public set rest(value: ListItem<T>) {
+        this.overwrite(RDF.rest, value, TermMapping.identity)
     }
 
     public pop(): T {
@@ -52,23 +60,8 @@ export class ListItem<T> extends TermWrapper {
         }
     }
 
-    public push(...items: T[]) {
-        let current: ListItem<T> = this
-
-        for (const item of items) {
-            current.restRaw = this.factory.blankNode()
-
-            current.rest.first = item
-            current.rest.restRaw = this.factory.namedNode(RDF.nil)
-
-            current = current.rest
-        }
-
-        return items.length
-    }
-
     public* items(): Iterable<ListItem<T>> {
-        if (!this.isListItem) {
+        if (this.firstRaw === undefined) {
             return
         }
 

@@ -6,7 +6,7 @@ import assert from "node:assert"
 
 class Wrapper extends TermWrapper {
     public get list(): string[] {
-        return this.singular("p", ObjectMapping.asList(ValueMapping.literalToString, TermMapping.stringToLiteral))
+        return this.singular("p", ObjectMapping.asList(this, "p", ValueMapping.literalToString, TermMapping.stringToLiteral))
     }
 }
 
@@ -195,29 +195,40 @@ describe("RDF List", () => {
             wrapper.list.push("o1")
         })
 
-        it("empty", {skip: "not implemented yet"}, () => {
+        it("empty returns new length", () => {
+            const rdf = `<s> <p> () .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            const pushed = wrapper.list.push("o1")
+
+            assert.strictEqual(pushed, 1)
+        })
+
+        it("empty grows", () => {
             const rdf = `<s> <p> () .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
             wrapper.list.push("o1")
+
+            assert.deepStrictEqual([...wrapper.list], ["o1"])
         })
 
-        it("one returns one", () => {
+        it("one returns new length", () => {
             const rdf = `<s> <p> ( "o1" ) .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
             const pushed = wrapper.list.push("o2")
 
-            assert.strictEqual(pushed, 1)
+            assert.strictEqual(pushed, 2)
         })
 
-        it("two returns two", () => {
+        it("two returns new length", () => {
             const rdf = `<s> <p> ( "o1" ) .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
             const pushed = wrapper.list.push("o2", "o3")
 
-            assert.strictEqual(pushed, 2)
+            assert.strictEqual(pushed, 3)
         })
 
         it("one grows", () => {

@@ -3,9 +3,16 @@ import type { IValueMapping } from "./type/IValueMapping.js"
 import type { ITermMapping } from "./type/ITermMapping.js"
 import { IndexerInterceptor } from "./IndexerInterceptor.js"
 import { ListItem } from "./ListItem.js"
+import { RDF } from "./vocabulary/RDF.js"
+import type { Term } from "@rdfjs/types"
+import { Overwriter } from "./Overwriter.js"
 
 export class RdfList<T> implements Array<T> {
-    constructor(private readonly anchor: TermWrapper, private readonly valueMapping: IValueMapping<T>, private readonly termMapping: ITermMapping<T>) {
+    private root: ListItem<T>
+
+    constructor(root: Term, private readonly subject: TermWrapper, private readonly predicate: string, private readonly valueMapping: IValueMapping<T>, private readonly termMapping: ITermMapping<T>) {
+        this.root = new ListItem(root, this.subject.dataset, this.subject.factory, valueMapping, termMapping)
+
         // TODO: Singleton interceptor?
         return new Proxy(this, new IndexerInterceptor<T>)
     }
@@ -109,11 +116,25 @@ export class RdfList<T> implements Array<T> {
     }
 
     push(...items: T[]): number {
-        if (this.length === 0) {
-            throw new Error("Adding to empty is not implemented yet")
+        const nil = this.subject.factory.namedNode(RDF.nil)
+
+        for (const item of items) {
+            // A node will be needed either to replace rdf:nil in an empty list or to add a new one to the end of an existing list
+            const newNode = new ListItem(this.subject.factory.blankNode(), this.subject.dataset, this.subject.factory, this.valueMapping, this.termMapping)
+
+            const lastNode = this.root.isNil ?
+                // The statement representing an empty list is replaced by a new one whose object is the new node
+                // The representation of the first item (root, currently rdf:nil, the empty list) is overwritten by the new node
+                this.root = new Overwriter<T>(this.subject, this.predicate).newListNode = newNode :
+
+                // replace rest of current last with new and return is because it's the new last
+                [...this.items].at(-1)!.rest = newNode;
+
+            lastNode.first = item
+            lastNode.restRaw = nil
         }
 
-        return [...this.items].at(-1)!.push(...items)
+        return this.length
     }
 
     reduce<U>(callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue?: U): U {
@@ -171,6 +192,6 @@ export class RdfList<T> implements Array<T> {
     }
 
     private get items(): Iterable<ListItem<T>> {
-        return new ListItem(this.anchor, this.valueMapping, this.termMapping).items()
+        return this.root.items()
     }
 }

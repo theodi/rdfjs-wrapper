@@ -21,7 +21,7 @@ export namespace ObjectMapping {
         return (termWrapper: TermWrapper) => new constructor(termWrapper.term, termWrapper.dataset, termWrapper.factory)
     }
 
-    export function asList<T>(valueMapping: IValueMapping<T>, termMapping: ITermMapping<T>): IValueMapping<T[]> {
-        return w => new RdfList(w, valueMapping, termMapping)
+    export function asList<T>(subject: TermWrapper, predicate: string, valueMapping: IValueMapping<T>, termMapping: ITermMapping<T>): IValueMapping<T[]> {
+        return w => new RdfList(w.term, subject, predicate, valueMapping, termMapping)
     }
 }

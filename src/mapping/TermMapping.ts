@@ -41,4 +41,8 @@ export namespace TermMapping {
     export function asIs(value: Term, dataset: DatasetCore, factory: DataFactory): TermWrapper | undefined {
         return new TermWrapper(value, dataset, factory)
     }
+
+    export function identity<T>(value: T): T {
+        return value
+    }
 }
