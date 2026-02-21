@@ -71,19 +71,4 @@ export class ListItem<T> extends TermWrapper {
             yield more
         }
     }
-
-    unshift(value: T) {
-        if (!this.isListItem) {
-            throw new Error("?")
-        }
-
-        const rest = this.restRaw
-
-        this.restRaw = this.factory.blankNode()
-
-        this.rest.firstRaw = this.firstRaw
-        this.rest.restRaw = rest
-
-        this.first = value
-    }
 }

@@ -314,7 +314,7 @@ describe("RDF List", () => {
             })
         })
 
-        it("empty adds", {skip: "not implemented yet"}, () => {
+        it("empty returns new length", () => {
             const rdf = `<s> <p> () .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
@@ -323,7 +323,16 @@ describe("RDF List", () => {
             assert.strictEqual(unshifted, 1)
         })
 
-        it("one adds one", () => {
+        it("empty grows", () => {
+            const rdf = `<s> <p> () .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            wrapper.list.unshift("o1")
+
+            assert.deepStrictEqual([...wrapper.list], ["o1"])
+        })
+
+        it("one returns new length", () => {
             const rdf = `<s> <p> ( "o1" ) .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
@@ -332,7 +341,7 @@ describe("RDF List", () => {
             assert.strictEqual(unshifted, 2)
         })
 
-        it("two adds two", () => {
+        it("two returns new length", () => {
             const rdf = `<s> <p> ( "o1" ) .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 

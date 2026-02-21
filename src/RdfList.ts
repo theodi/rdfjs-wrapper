@@ -186,11 +186,11 @@ export class RdfList<T> implements Array<T> {
     }
 
     unshift(...items: T[]): number {
-        for (const itemToInsert of items.reverse()) {
-            for (const item of this.items) {
-                item.unshift(itemToInsert)
-                break
-            }
+        for (const item of items.reverse()) {
+            const firstNode = this.root
+            this.root = new Overwriter<T>(this.subject, this.predicate).listNode = new ListItem(this.subject.factory.blankNode(), this.subject.dataset, this.subject.factory, this.valueMapping, this.termMapping)
+            this.root.first = item
+            this.root.rest = firstNode
         }
 
         return this.length
