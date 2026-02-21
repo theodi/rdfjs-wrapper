@@ -12,15 +12,6 @@ class Wrapper extends TermWrapper {
 
 describe("RDF List", () => {
     describe("not implemented", () => {
-        it("concat", () => {
-            const rdf = `<s> <p> <o> .`
-            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
-
-            assert.throws(() => {
-                wrapper.list.concat()
-            }, /^Error: not implemented$/)
-        })
-
         it("copyWithin", () => {
             const rdf = `<s> <p> <o> .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
@@ -45,24 +36,6 @@ describe("RDF List", () => {
 
             assert.throws(() => {
                 wrapper.list.flat()
-            }, /^Error: not implemented$/)
-        })
-
-        it("reduce", () => {
-            const rdf = `<s> <p> <o> .`
-            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
-
-            assert.throws(() => {
-                wrapper.list.reduce(undefined!)
-            }, /^Error: not implemented$/)
-        })
-
-        it("reduceRight", () => {
-            const rdf = `<s> <p> <o> .`
-            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
-
-            assert.throws(() => {
-                wrapper.list.reduceRight(undefined!)
             }, /^Error: not implemented$/)
         })
 

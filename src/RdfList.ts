@@ -42,7 +42,7 @@ export class RdfList<T> implements Array<T> {
     }
 
     concat(...items: Array<ConcatArray<T> | T>): T[] {
-        throw new Error("not implemented")
+        return [...this].concat(...items)
     }
 
     copyWithin(target: number, start: number, end?: number): this {
@@ -138,11 +138,11 @@ export class RdfList<T> implements Array<T> {
     }
 
     reduce<U>(callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue?: U): U {
-        throw new Error("not implemented")
+        return [...this].reduce(callback, initialValue!)
     }
 
     reduceRight<U>(callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue?: U): U {
-        throw new Error("not implemented")
+        return [...this].reduceRight(callback, initialValue!)
     }
 
     reverse(): T[] {
