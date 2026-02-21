@@ -12,15 +12,6 @@ class Wrapper extends TermWrapper {
 
 describe("RDF List", () => {
     describe("not implemented", () => {
-        it("[Symbol.unscopables]", () => {
-            const rdf = `<s> <p> <o> .`
-            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
-
-            assert.throws(() => {
-                const _ = wrapper.list[Symbol.unscopables]
-            }, /^Error: not implemented$/)
-        })
-
         it("concat", () => {
             const rdf = `<s> <p> <o> .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
@@ -130,6 +121,13 @@ describe("RDF List", () => {
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
             assert.deepStrictEqual([...wrapper.list], ["o1", "o2"])
+        })
+
+        it("[Symbol.unscopables]", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.deepStrictEqual(wrapper.list[Symbol.unscopables], [][Symbol.unscopables])
         })
     })
 

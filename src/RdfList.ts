@@ -21,7 +21,7 @@ export class RdfList<T> implements Array<T> {
     [n: number]: T
 
     get [Symbol.unscopables](): { [K in keyof any[]]?: boolean } {
-        throw new Error("not implemented")
+        return Array.prototype[Symbol.unscopables]
     }
 
     get length(): number {
