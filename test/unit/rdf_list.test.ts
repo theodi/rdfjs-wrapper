@@ -102,8 +102,31 @@ describe("RDF List", () => {
 
             assert.deepStrictEqual(wrapper.list[Symbol.unscopables], [][Symbol.unscopables])
         })
+    })
 
-        it("set length not supported", () => {
+    describe("length", () => {
+        it("not list is zero", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.strictEqual(wrapper.list.length, 0)
+        })
+
+        it("empty is zero", () => {
+            const rdf = `<s> <p> () .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.strictEqual(wrapper.list.length, 0)
+        })
+
+        it("one is one", () => {
+            const rdf = `<s> <p> ( "o" ) .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.strictEqual(wrapper.list.length, 1)
+        })
+
+        it("set not supported", () => {
             const rdf = `<s> <p> <o> .`
             const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
 
