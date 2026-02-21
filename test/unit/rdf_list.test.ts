@@ -129,6 +129,13 @@ describe("RDF List", () => {
 
             assert.deepStrictEqual(wrapper.list[Symbol.unscopables], [][Symbol.unscopables])
         })
+
+        it("set length not supported", () => {
+            const rdf = `<s> <p> <o> .`
+            const wrapper = new Wrapper("s", datasetFromRdf(rdf), DataFactory)
+
+            assert.throws(() => wrapper.list.length = undefined!)
+        })
     })
 
     describe("pop", () => {
