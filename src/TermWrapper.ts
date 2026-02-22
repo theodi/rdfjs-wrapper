@@ -2,6 +2,7 @@ import type { DataFactory, DatasetCore, Quad_Object, Quad_Subject, Term } from "
 import type { ITermMapping } from "./type/ITermMapping.js"
 import type { IValueMapping } from "./type/IValueMapping.js"
 import { WrappingSet } from "./WrappingSet.js"
+import { WrappingMap } from "./WrappingMap.js"
 
 
 export class TermWrapper {
@@ -90,6 +91,10 @@ export class TermWrapper {
 
     protected objects<T>(p: string, valueMapping: IValueMapping<T>, termMapping: ITermMapping<T>): Set<T> {
         return new WrappingSet(this, p, valueMapping, termMapping)
+    }
+
+    protected map<TKey, TValue>(p: string, valueMapping: IValueMapping<[TKey, TValue]>, termMapping: ITermMapping<[TKey, TValue]>): Map<TKey, TValue> {
+        return new WrappingMap(this, p, valueMapping, termMapping)
     }
 
     private static isQuadSubject(term: Term): term is Quad_Subject {
