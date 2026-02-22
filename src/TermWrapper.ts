@@ -24,18 +24,20 @@ export class TermWrapper {
 
     protected singular<T>(p: string, valueMapping: IValueMapping<T>): T {
         const predicate = this.factory.namedNode(p)
-        const matches = this.dataset.match(this.term, predicate)
+        const matches = this.dataset.match(this.term, predicate)[Symbol.iterator]()
 
         // TODO: Expose standard errors
-        if (matches.size > 1) {
+        const {value: first, done: none} = matches.next()
+
+        if (none) {
             throw new Error(`More than one value for predicate ${p} on term ${this.term.value}`)
         }
 
-        for (const q of matches) {
-            return valueMapping(new TermWrapper(q.object, this.dataset, this.factory))
+        if (!matches.next().done) {
+            throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
         }
 
-        throw new Error(`No value found for predicate ${p} on term ${this.term.value}`)
+        return valueMapping(new TermWrapper(first.object, this.dataset, this.factory))
     }
 
     protected singularNullable<T>(p: string, valueMapping: IValueMapping<T>): T | undefined {
